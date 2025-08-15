@@ -1,21 +1,25 @@
-import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types';
+
+
+
+
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'Astro Theme Pure',
+  title: "Seeridia's Home",
   /** Will be used in index page & copyright declaration */
-  author: 'Pure Lab',
+  author: 'Seeridia',
   /** Description metadata for your website. Can be used in page metadata. */
-  description: 'Stay hungry, stay foolish',
+  description: 'Seeridia 的领地！',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/favicon/favicon.ico',
   /** Specify the default language for this site. */
   locale: {
-    lang: 'en-US',
-    attrs: 'en_US',
+    lang: 'zh-CN',
+    attrs: 'zh_CN',
     // Date locale
-    dateLocale: 'en-US',
+    dateLocale: 'zh-CN',
     dateOptions: {
       day: 'numeric',
       month: 'short',
@@ -48,9 +52,8 @@ export const theme: ThemeUserConfig = {
   header: {
     menu: [
       { title: 'Blog', link: '/blog' },
-      { title: 'Docs', link: '/docs' },
       { title: 'Projects', link: '/projects' },
-      { title: 'Links', link: '/links' },
+      // { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' }
     ]
   },
@@ -63,14 +66,14 @@ export const theme: ThemeUserConfig = {
     links: [
       // Registration link
       {
-        title: 'Moe ICP 114514',
-        link: 'https://icp.gov.moe/?keyword=114514',
+        title: '闽ICP备2025099091号',
+        link: 'https://beian.miit.gov.cn',
         style: 'text-sm' // Uno/TW CSS class
       },
       {
-        title: 'Travelling',
-        link: 'https://www.travellings.cn/go.html',
-        style: 'text-sm'
+        title: '闽公网安备35018302000247号',
+        link: 'https://beian.mps.gov.cn/#/query/webSearch?code=35018302000247',
+        style: 'text-sm' // Uno/TW CSS class
       },
       // Privacy Policy link
       {
@@ -80,9 +83,9 @@ export const theme: ThemeUserConfig = {
       }
     ],
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
-    credits: true,
+    credits: false,
     /** Optional details about the social media accounts for this site. */
-    social: { github: 'https://github.com/cworld1/astro-theme-pure' }
+    social: { github: 'https://github.com/seeridia', email: 'mailto:seeridia@gmail.com' }
   },
 
   content: {
@@ -98,21 +101,21 @@ export const theme: ThemeUserConfig = {
 export const integ: IntegrationUserConfig = {
   // Links management
   // See: https://astro-pure.js.org/docs/integrations/links
-  links: {
-    // Friend logbook
-    logbook: [
-      { date: '2024-07-01', content: 'Lorem ipsum dolor sit amet.' },
-      { date: '2024-07-01', content: 'vidit suscipit at mei.' },
-      { date: '2024-07-01', content: 'Quem denique mea id.' }
-    ],
-    // Yourself link info
-    applyTip: [
-      { name: 'Name', val: theme.title },
-      { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://astro-pure.js.org/' },
-      { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
-    ]
-  },
+  // links: {
+  //   // Friend logbook
+  //   logbook: [
+  //     { date: '2024-07-01', content: 'Lorem ipsum dolor sit amet.' },
+  //     { date: '2024-07-01', content: 'vidit suscipit at mei.' },
+  //     { date: '2024-07-01', content: 'Quem denique mea id.' }
+  //   ],
+  //   // Yourself link info
+  //   applyTip: [
+  //     { name: 'Name', val: theme.title },
+  //     { name: 'Desc', val: theme.description || 'Null' },
+  //     { name: 'Link', val: 'https://astro-pure.js.org/' },
+  //     { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
+  //   ]
+  // },
   // Enable page search function
   pagefind: true,
   // Add a random quote to the footer (default on homepage footer)
@@ -145,9 +148,9 @@ export const integ: IntegrationUserConfig = {
   },
   // Comment system
   waline: {
-    enable: true,
+    enable: false,
     // Server service link
-    server: 'https://astro-theme-pure-waline.arthals.ink/',
+    server: 'https://kwlrvqzj.api.lncldglobal.com',
     // Refer https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
     // Refer https://waline.js.org/en/reference/client/props.html

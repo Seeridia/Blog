@@ -1,158 +1,122 @@
 ---
-import { Image } from 'astro:assets'
 
-import { Button, Collapse, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
-import Sponsors from '@/components/projects/Sponsors.astro'
-import Sponsorship from '@/components/projects/Sponsorship.astro'
-import alipay from '@/assets/alipay-qrcode.jpg'
-import KeyIcon from '@/assets/icons/key.svg'
-import wechat from '@/assets/wechat-qrcode.jpg'
 import config from '@/site-config'
 
 const headings = [
-  { depth: 2, slug: 'theme', text: 'Theme' },
-  { depth: 2, slug: 'programs', text: 'Programs' },
-  { depth: 2, slug: 'learnings', text: 'Learnings' },
-  { depth: 2, slug: 'others', text: 'Others' },
-  { depth: 2, slug: 'gpg-signature', text: 'GPG Signature' },
-  { depth: 2, slug: 'sponsorship', text: 'Sponsorship' }
+  { depth: 2, slug: 'MyWorks', text: 'My Works' },
+  { depth: 2, slug: 'MyContributions', text: 'My Contributions' },
 ]
 ---
 
 <PageLayout title='Projects' {headings} info={{ slug: '/projects', hideComment: true }}>
-  <p>Github Activities:</p>
-  <p>
+  <!-- <p>
     <Image
-      src='https://ghchart.rshah.org/659eb9/cworld1'
+      src='https://ghchart.rshah.org/Seeridia'
       alt='github activities'
       inferSize
       loading='lazy'
     />
-  </p>
-  <p>
+  </p> -->
+  <!-- <p>
     If you think it would be useful or interesting to collaborate on a project, you can donate to
     support my work or contact me to discuss a project.
   </p>
   <Button title='Checkout sponsorship' class='w-fit' href='#sponsorship'>
     <Icon class='size-5' name='receive-money' slot='before' />
-  </Button>
+  </Button> -->
 
-  <h2 id='theme'>Theme</h2>
+  <h2 id='MyWorks'>My Works</h2>
   <ProjectSection
     projects={[
       {
-        name: '🍭 Astro-theme-pure',
-        description: 'A simple, clean but powerful blog theme build by astro.',
+        name: 'Shotmeld',
+        description: '高颜值的在线照片存储与管理平台',
         links: [
-          { type: 'github', href: 'https://github.com/cworld1/astro-theme-pure' },
-          { type: 'site', href: 'https://github.com/cworld1/astro-theme-pure' },
+          { type: 'github', href: 'https://github.com/ShotMeld/Shotmeld-web' },
+          { type: 'site', href: 'https://shotmeld.seeridia.top' }
+          // {
+          //   type: 'doc',
+          //   href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/blog/customize/index.md'
+          // }
+        ]
+      },
+      {
+        name: 'Alto',
+        description: '为 typora 编辑器精心设计的主题，专注于提升写作与思考的沉浸体验',
+        links: [
+          { type: 'github', href: 'https://github.com/Seeridia/typora-theme-alto' },
+          { type: 'site', href: 'https://theme.typora.io/theme/Alto' },
           {
             type: 'doc',
-            href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/blog/customize/index.md'
+            href: 'https://github.com/Seeridia/typora-theme-alto/blob/main/README.md'
           }
+        ]
+      },
+      {
+        name: 'Clipboard Viewer',
+        description: '剪切板内容解析、调试工具',
+        links: [
+          { type: 'github', href: 'https://github.com/Seeridia/Clipboard-Viewer' },
+          { type: 'site', href: 'https://clipboard-viewer.seeridia.top/' }
+        ]
+      },
+      {
+        name: 'Cardify',
+        description: '什么东西都没有的什么新坑',
+        links: [
+          { type: 'github', href: 'https://github.com/Seeridia/Cardify' }
+          // { type: 'site', href: 'https://cardify.top/' }
         ]
       }
     ]}
   />
 
-  <h2 id='programs'>Programs</h2>
+  <h2 id='MyContributions'>My Contributions</h2>
   <ProjectSection
     projects={[
       {
-        name: '📒 Notie',
-        description:
-          'Android note App complies with Material You specifications, developed using Java',
+        name: 'Tencent / Cherry Markdown',
+        description: 'Javascript Markdown 编辑器',
         links: [
-          { type: 'github', href: 'https://github.com/cworld1/notie' },
+          { type: 'github', href: 'https://github.com/Tencent/cherry-markdown' },
           {
             type: 'release',
-            href: 'https://github.com/cworld1/notie/releases'
-          }
-        ]
-      },
-      {
-        name: '💄 PKU Art',
-        description: 'A script to beautify pku course website',
-        links: [
-          { type: 'github', href: 'https://github.com/zhuozhiyongde/pku-art' },
-          { type: 'site', href: 'https://github.com/zhuozhiyongde/pku-art' },
-          { type: 'doc', href: 'https://docs.arthals.ink/docs/pku-art' }
-        ]
-      }
-    ]}
-  />
-  <Collapse title='Some old projects'>
-    <ProjectSection
-      projects={[
-        {
-          name: 'Search Switcher',
-          description: 'Add links to each other in search engines',
-          links: [{ type: 'github', href: 'https://github.com/cworld1/search-switcher' }]
-        },
-        {
-          name: 'Pure Baidu',
-          description: 'Baidu search page beautification module',
-          links: [
-            { type: 'doc', href: 'https://cworld0.com/blog/pure-baidu' },
-            { type: 'site', href: 'https://userstyles.org/styles/173673/pure' }
-          ]
-        }
-      ]}
-    />
-  </Collapse>
-
-  <h2 id='learnings'>Learnings</h2>
-  <ProjectSection
-    class='my-2'
-    projects={[
-      {
-        name: 'Rust Learning',
-        description: 'Some notes and code about CWorld learning Rust',
-        links: [{ type: 'github', href: 'https://github.com/cworld1/rust-learning' }]
-      },
-      {
-        name: 'CS 213 Learning',
-        description: 'Notes, code and experiences for Introduction to Computer Systems course',
-        links: [
+            href: 'https://www.npmjs.com/package/cherry-markdown'
+          },
           {
-            type: 'github',
-            href: 'https://github.com/zhuozhiyongde/Introduction-To-Computer-System-2023Fall-PKU'
+            type: 'doc',
+            href: 'https://github.com/Tencent/cherry-markdown/wiki'
           }
         ]
-      }
-    ]}
-  />
-
-  <h2 id='others'>Others</h2>
-  <ProjectSection
-    projects={[
-      {
-        name: 'CWorld',
-        description: "CWorld's Github",
-        links: [{ type: 'github', href: 'https://github.com/cworld1' }]
       },
       {
-        name: 'Arthals',
-        description: 'Arthals Github',
-        links: [{ type: 'github', href: 'https://github.com/zhuozhiyongde' }]
+        name: 'west2-online / fzuhelper-app',
+        description: 'Javascript Markdown 编辑器',
+        links: [
+          { type: 'github', href: 'https://github.com/west2-online/fzuhelper-app' },
+          {
+            type: 'release',
+            href: 'https://fzuhelper.w2fzu.com/'
+          }
+        ]
       }
     ]}
   />
 
   <!-- gpg signature -->
-  <h2 id='gpg-signature'>GPG Signature</h2>
+  <!-- <h2 id='gpg-signature'>GPG Signature</h2>
   <p>
     You can verify the authenticity of the files I signed by checking the GPG signature. My GPG key
     is <code>114514</code>, and you can find it on the opengpg key servers or download from it.
   </p>
   <Button href='https://keys.openpgp.org/search?q=114514' title='Checkout my key' target='_blank'>
     <KeyIcon class='size-5' slot='before' />
-  </Button>
+  </Button> -->
 
   <!-- sponsorship -->
-  <h2 id='sponsorship'>Sponsorship</h2>
+  <!-- <h2 id='sponsorship'>Sponsorship</h2>
   <p>Please leave a message or contact me proactively after sponsorship.</p>
   <Sponsorship
     methods={[
@@ -169,41 +133,42 @@ const headings = [
       { name: 'Anonymous', amount: '20.00', date: '2022-04-06' }
     ]}
   />
-</PageLayout>
+</PageLayout> -->
 
-<script
-  is:inline
-  type='module'
-  data-astro-rerun
-  define:vars={{ npmCDN: config.npmCDN, walineServer: config.integ.waline.server }}
->
-  const loadPageviewCount = async () => {
-    const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
-    pageview.pageviewCount({
-      serverURL: walineServer,
-      path: window.location.pathname
-    })
-  }
-
-  await loadPageviewCount()
-</script>
-
-<style>
-  .sponsorship-card {
-    & .sponsorship-card-img {
-      opacity: 0.3;
-      --un-blur: blur(4px);
-      filter: var(--un-blur);
+  <script
+    is:inline
+    type='module'
+    data-astro-rerun
+    define:vars={{ npmCDN: config.npmCDN, walineServer: config.integ.waline.server }}
+  >
+    const loadPageviewCount = async () => {
+      const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
+      pageview.pageviewCount({
+        serverURL: walineServer,
+        path: window.location.pathname
+      })
     }
 
-    &:hover {
-      & .sponsorship-card-icon {
-        opacity: 0;
-      }
+    await loadPageviewCount()
+  </script>
+
+  <style>
+    .sponsorship-card {
       & .sponsorship-card-img {
-        opacity: 1;
-        --un-blur: blur(0);
+        opacity: 0.3;
+        --un-blur: blur(4px);
+        filter: var(--un-blur);
+      }
+
+      &:hover {
+        & .sponsorship-card-icon {
+          opacity: 0;
+        }
+        & .sponsorship-card-img {
+          opacity: 1;
+          --un-blur: blur(0);
+        }
       }
     }
-  }
-</style>
+  </style>
+</PageLayout>
