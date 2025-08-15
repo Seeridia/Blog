@@ -1,0 +1,149 @@
+---
+title: 从网站的上线开始讲起
+publishDate: 2025-08-15 22:00:00
+description: '记录下自己的网站上线过程，也包含 GitHub Actions 下的自动化部署'
+tags:
+  - Website
+  - Github Actions
+heroImage: { src: './cover.webp', color: '#F4B2A6' }
+language: '中文'
+---
+
+虽然标题叫做「从网站的上线开始讲起」，，但其实并不是或许你想象中的个人故事，毕竟我还啥都不会，也没什么经历和故事，所以，这章真的是——网站的上线
+
+本文主要涉及的是一个个人的上线工作流，包含 CI、CD 等等
+
+## Vercel
+
+太过于美妙的前端部署平台，支持 Next.js、React 等几乎所有的框架。在 Vercel 中添加 Github 仓库，Vercel 会自动识别项目类型并进行构建。随后就可以直接设置相关的域名和环境变量等。比如你现在面前所看到的网站就是用 Vercel 部署的
+
+总结一下优缺点：
+
+- 优点：
+  - 简单易用：只需将代码推送到 GitHub，Vercel 会自动构建和部署
+  - 支持多种框架：兼容 Next.js、React 等主流框架
+  - 自动化：内置 CI/CD 流程，无需手动配置
+  - Free!
+- 缺点：
+  - 访问速度慢：在国内访问速度较慢，尤其是在某些地区（特别指出我所在的福建）
+
+其实这一个缺点就足够致命了，尤其是对于需要频繁访问的项目，我对于重要的项目还是会选择部署在国内的服务器上。日后也会把这个博客放过去，目前在 Vercel 上的博客只是一个过渡。
+
+## Github Actions + 服务器部署
+
+这个就麻烦多了
+
+### 第一步：SSH 密钥
+
+这个生成一次就好，之后就都用这个
+
+#### 1. 生成 SSH 密钥对
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "github_actions_deploy_key"
+```
+
+接下来可以一直按回车，密钥会保存在默认位置 `~/.ssh/id_rsa` 和 `~/.ssh/id_rsa.pub`。
+
+- `id_rsa`：**私钥** (Private Key)，这个绝对不能泄露
+- `id_rsa.pub`：**公钥** (Public Key)，这个是用来配置在服务器上的
+
+#### 2. 授权公钥
+
+将生成的公钥 `id_rsa.pub` 内容添加到服务器的 `~/.ssh/authorized_keys` 文件中。
+
+```bash
+# 将公钥内容追加到 authorized_keys 文件中
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+# 确保文件权限正确，否则 SSH 服务会拒绝连接
+chmod 600 ~/.ssh/authorized_keys
+```
+
+#### 3. 获取私钥
+
+```
+cat ~/.ssh/id_rsa
+```
+
+**完整地复制**终端输出的所有内容，包括 `-----BEGIN RSA PRIVATE KEY-----` 和 `-----END RSA PRIVATE KEY-----` 这两行。
+
+这个就是服务器私钥。
+
+### 第二步：服务器配置
+
+我最早都是用的 Nginx 来部署静态网站，但是发现网站很多的时候，Nginx 的配置就会变得非常复杂，所以现在直接用 1Panel 来管理服务器 <del>（其实是我不会，每次都叫 AI，确实有点麻烦了）</del>
+
+使用 1Panel 来管理网站、证书什么的，那叫一个舒适啊，这边点几下就成。
+
+![](1panel-website.webp)
+
+这边要注意一下这边的目录：`/opt/1panel/www/sites/example.seeridia.top/index`，我们待会配置 Github Actions 的时候要用到。
+
+### 第三步：Github Actions
+
+```yaml
+# .github/workflows/deploy.yml
+
+# 工作流名称
+name: Deploy to Production Server
+
+# 触发条件：当有代码推送到 main 分支时
+on:
+  push:
+    branches:
+      - main
+
+# 工作任务
+jobs:
+  build-and-deploy:
+    # 运行环境：使用最新的 Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # 第一步：迁出代码
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 第二步：设置 Node.js 环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # 使用与你服务器上相同的 Node.js 版本
+          node-version: '22'
+          # yarn 的话加这个
+          # cache: 'yarn'
+
+      # 第三步：安装依赖
+      - name: Install Dependencies
+        run: npm install 
+        # run: yarn install
+
+      # 第四步：打包项目
+      - name: Build Project
+        run: npm run build
+        # run: yarn build
+
+      # 第五步：部署到服务器
+      - name: Deploy to Server
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "dist/*"
+          target: ${{ secrets.TARGET_DIR }}
+          strip_components: 1
+```
+
+同时我们需要在 Github 仓库的 Secrets 中添加以下变量：
+
+- `SERVER_HOST`：服务器的 IP 地址
+- `SERVER_USER`：服务器的用户名
+- `SSH_PRIVATE_KEY`：服务器的 SSH 私钥（刚刚获取的那个）
+- `TARGET_DIR`：服务器上部署的目标目录
+
+---
+
+OK，就这样，非常轻松的，Github Actions 会在每次代码推送到 `main` 分支时自动触发，执行上述步骤，将代码打包并部署到服务器上。
+
