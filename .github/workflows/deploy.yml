@@ -1,0 +1,46 @@
+# .github/workflows/deploy.yml
+
+# 工作流名称
+name: Deploy to Production Server
+
+# 触发条件：当有代码推送到 main 分支时
+on:
+  push:
+    branches:
+      - main
+
+# 工作任务
+jobs:
+  build-and-deploy:
+    # 运行环境：使用最新的 Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # 第一步：迁出代码
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 第二步：设置 Bun 环境
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 'latest'
+
+      # 第三步：安装依赖
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      # 第四步：打包项目
+      - name: Build Project
+        run: bun run build
+
+      # 第五步：部署到服务器
+      - name: Deploy to Server
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "dist/*"
+          target: ${{ secrets.TARGET_DIR }}
+          strip_components: 1
