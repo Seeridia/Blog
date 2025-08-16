@@ -81,8 +81,11 @@ cat ~/.ssh/id_rsa
 这边要注意一下这边的目录：`/opt/1panel/www/sites/example.seeridia.top/index`，我们待会配置 Github Actions 的时候要用到。
 
 ### 第三步：Github Actions
+import { Tabs, TabItem } from 'astro-pure/user';
 
-```yaml
+<Tabs>
+  <TabItem label="npm">
+```yml
 # .github/workflows/deploy.yml
 
 # 工作流名称
@@ -111,18 +114,14 @@ jobs:
         with:
           # 使用与你服务器上相同的 Node.js 版本
           node-version: '22'
-          # yarn 的话加这个
-          # cache: 'yarn'
 
       # 第三步：安装依赖
       - name: Install Dependencies
         run: npm install 
-        # run: yarn install
 
       # 第四步：打包项目
       - name: Build Project
         run: npm run build
-        # run: yarn build
 
       # 第五步：部署到服务器
       - name: Deploy to Server
@@ -135,6 +134,62 @@ jobs:
           target: ${{ secrets.TARGET_DIR }}
           strip_components: 1
 ```
+  </TabItem>
+  <TabItem label="yarn">
+
+```yml
+# .github/workflows/deploy.yml
+
+# 工作流名称
+name: Deploy to Production Server
+
+# 触发条件：当有代码推送到 main 分支时
+on:
+  push:
+    branches:
+      - main
+
+# 工作任务
+jobs:
+  build-and-deploy:
+    # 运行环境：使用最新的 Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # 第一步：迁出代码
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 第二步：设置 Node.js 环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # 使用与你服务器上相同的 Node.js 版本
+          node-version: '22'
+          cache: 'yarn'
+
+      # 第三步：安装依赖
+      - name: Install Dependencies
+        run: yarn install
+
+      # 第四步：打包项目
+      - name: Build Project
+        run: yarn build
+
+      # 第五步：部署到服务器
+      - name: Deploy to Server
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "dist/*"
+          target: ${{ secrets.TARGET_DIR }}
+          strip_components: 1
+```
+  </TabItem>
+</Tabs>
+
 
 同时我们需要在 Github 仓库的 Secrets 中添加以下变量：
 
