@@ -1,0 +1,185 @@
+---
+title: Github Actions 自动化发布
+publishDate: 2025-08-17 12:00:00
+description: '以 构建 Tauri 应用 为例，使用 Github Actions 实现自动化发布'
+tags:
+  - Github Actions
+heroImage: { src: './cover.webp', color: '#9D8DA7' }
+language: '中文'
+---
+
+import { GithubCard } from 'astro-pure/advanced'
+
+我以下面这个 Tauri 应用为例，记录如何 Github Actions 实现自动化发布
+
+<GithubCard repo='Seeridia/clipboard-viewer' />
+
+我分成两部分，一个是每次 Commit 都自动构建应用，另一个是每次发布 Release 时自动打包应用。
+
+## 推送构建
+
+只要在主分支有代码提交，或发起 Pull Request，就会触发构建，产物放在 Actions 的 Artifacts 中
+
+```yml
+# .github/workflows/build-test.yml
+
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libssl-dev \
+            libgtk-3-dev \
+            libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build Tauri application
+        uses: tauri-apps/tauri-action@v0.5.22
+
+      - name: Prepare artifact details
+        id: prepare_artifact
+        shell: bash
+        run: |
+          ARCH=$(echo "${{ runner.arch }}" | tr '[:upper:]' '[:lower:]')
+          ARTIFACT_PATH=""
+          ARTIFACT_NAME=""
+
+          if [ "${{ runner.os }}" == "macOS" ]; then
+            ARTIFACT_PATH=$(find src-tauri/target/release/bundle/dmg -name "*.dmg" -print -quit)
+            ARTIFACT_NAME="clipboard-viewer-latest-mac-${ARCH}.dmg"
+          elif [ "${{ runner.os }}" == "Windows" ]; then
+            ARTIFACT_PATH=$(find src-tauri/target/release/bundle/msi -name "*.msi" -print -quit)
+            ARTIFACT_NAME="clipboard-viewer-latest-win-${ARCH}.msi"
+          elif [ "${{ runner.os }}" == "Linux" ]; then
+            ARTIFACT_PATH=$(find src-tauri/target/release/bundle/appimage -name "*.AppImage" -print -quit)
+            ARTIFACT_NAME="clipboard-viewer-latest-linux-${ARCH}.AppImage"
+          fi
+          
+          echo "Found artifact at: ${ARTIFACT_PATH}"
+          echo "New artifact name: ${ARTIFACT_NAME}"
+          echo "path=${ARTIFACT_PATH}" >> $GITHUB_OUTPUT
+          echo "name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.prepare_artifact.outputs.name }}
+          path: ${{ steps.prepare_artifact.outputs.path }}
+```
+
+## 发布构建
+
+在推送 Release Tag 时，会自动触发构建并发布应用
+
+```yml
+# .github/workflows/release.yml
+
+name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish-release:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libssl-dev \
+            libgtk-3-dev \
+            libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build and publish release
+        uses: tauri-apps/tauri-action@v0.5.22
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'App Version ${{ github.ref_name }}'
+          releaseBody: 'See the assets to download this version.'
+          releaseDraft: false
+          prerelease: false
+```
+
+## 注意
+
+1. 无需配置 `GITHUB_TOKEN` 等，Github Actions 会自动提供。
+2. 需要在 Settings > Actions > General > Workflow permissions 中，选择 "Read and write permissions"
