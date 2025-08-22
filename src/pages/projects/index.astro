@@ -2,7 +2,6 @@
 
 import PageLayout from '@/layouts/CommonPage.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
-import config from '@/site-config'
 
 const headings = [
   { depth: 2, slug: 'MyWorks', text: 'My Works' },
@@ -10,7 +9,7 @@ const headings = [
 ]
 ---
 
-<PageLayout title='Projects' {headings} info={{ slug: '/projects', hideComment: true }}>
+<PageLayout title='Projects' {headings} view>
   <!-- <p>
     <Image
       src='https://ghchart.rshah.org/Seeridia'
@@ -134,23 +133,6 @@ const headings = [
     ]}
   />
 </PageLayout> -->
-
-  <script
-    is:inline
-    type='module'
-    data-astro-rerun
-    define:vars={{ npmCDN: config.npmCDN, walineServer: config.integ.waline.server }}
-  >
-    const loadPageviewCount = async () => {
-      const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
-      pageview.pageviewCount({
-        serverURL: walineServer,
-        path: window.location.pathname
-      })
-    }
-
-    await loadPageviewCount()
-  </script>
 
   <style>
     .sponsorship-card {

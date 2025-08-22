@@ -1,5 +1,4 @@
 ---
-import { Comment } from 'astro-pure/advanced'
 import PageLayout from '@/layouts/CommonPage.astro'
 
 const headings = [
@@ -11,7 +10,7 @@ const headings = [
 ]
 ---
 
-<PageLayout title='About' {headings} info='/about'>
+<PageLayout title='About' {headings} comment>
   <p>Developer / Designer</p>
   <p>
     福州大学在读，2028 届本科生，软件工程专业。正在猛猛学习～～
@@ -237,5 +236,4 @@ const headings = [
       >
     </li>
   </ul> -->
-  <Comment slot='bottom' />
 </PageLayout>
