@@ -1,12 +1,10 @@
 ---
 import PageLayout from '@/layouts/CommonPage.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
 
 const headings = [
-  { depth: 2, slug: 'hobbies', text: 'Hobbies' },
-  { depth: 2, slug: 'tools', text: 'Tools' },
-  { depth: 2, slug: 'social-networks', text: 'Social Networks' },
-  { depth: 2, slug: 'gossips', text: 'Gossips' },
-  { depth: 2, slug: 'about-blog', text: 'About Blog' }
+  { depth: 2, slug: 'MyWorks', text: 'My Works' },
+  { depth: 2, slug: 'MyContributions', text: 'My Contributions' }
 ]
 ---
 
@@ -15,6 +13,85 @@ const headings = [
   <p>
     福州大学在读，2028 届本科生，软件工程专业。正在猛猛学习～～
   </p>
+
+  <h2 id='MyWorks'>My Works</h2>
+  <ProjectSection
+    projects={[
+      {
+        name: 'Shotmeld',
+        description: '高颜值的在线照片存储与管理平台',
+        links: [
+          { type: 'github', href: 'https://github.com/ShotMeld/Shotmeld-web' },
+          { type: 'site', href: 'https://shotmeld.seeridia.top' }
+          // {
+          //   type: 'doc',
+          //   href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/blog/customize/index.md'
+          // }
+        ]
+      },
+      {
+        name: 'Alto',
+        description: '为 typora 编辑器精心设计的主题，专注于提升写作与思考的沉浸体验',
+        links: [
+          { type: 'github', href: 'https://github.com/Seeridia/typora-theme-alto' },
+          { type: 'site', href: 'https://theme.typora.io/theme/Alto' },
+          {
+            type: 'doc',
+            href: 'https://github.com/Seeridia/typora-theme-alto/blob/main/README.md'
+          }
+        ]
+      },
+      {
+        name: 'Clipboard Viewer',
+        description: '剪切板内容解析、调试工具',
+        links: [
+          { type: 'github', href: 'https://github.com/Seeridia/Clipboard-Viewer' },
+          { type: 'site', href: 'https://clipboard-viewer.seeridia.top/' }
+        ]
+      },
+      {
+        name: 'Cardify',
+        description: '什么东西都没有的什么新坑',
+        links: [
+          { type: 'github', href: 'https://github.com/Seeridia/Cardify' }
+          // { type: 'site', href: 'https://cardify.top/' }
+        ]
+      }
+    ]}
+  />
+
+  <h2 id='MyContributions'>My Contributions</h2>
+  <ProjectSection
+    projects={[
+      {
+        name: 'Tencent / Cherry Markdown',
+        description: 'Javascript Markdown 编辑器',
+        links: [
+          { type: 'github', href: 'https://github.com/Tencent/cherry-markdown' },
+          {
+            type: 'release',
+            href: 'https://www.npmjs.com/package/cherry-markdown'
+          },
+          {
+            type: 'doc',
+            href: 'https://github.com/Tencent/cherry-markdown/wiki'
+          }
+        ]
+      },
+      {
+        name: 'west2-online / fzuhelper-app',
+        description: 'Javascript Markdown 编辑器',
+        links: [
+          { type: 'github', href: 'https://github.com/west2-online/fzuhelper-app' },
+          {
+            type: 'release',
+            href: 'https://fzuhelper.w2fzu.com/'
+          }
+        ]
+      }
+    ]}
+  />
+
   <!-- <Button title='Sponsor Me' class='w-fit' href='/projects#sponsorship' style='ahead' /> -->
 
   <!-- {/* tools */}

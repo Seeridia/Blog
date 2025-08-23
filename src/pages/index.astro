@@ -7,6 +7,7 @@ import { Button, Card, Icon, Label } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
 import avatar from '@/assets/avatar.jpg'
 import config from '@/site-config'
 
@@ -54,11 +55,92 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       </a>
     </section>
 
-    <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
+    <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-7/8'>
       <Section title='About'>
         <p class='text-muted-foreground'>👋 Hi, 我是 Seeridia!</p>
-        <p class='text-muted-foreground'>福州大学在读，2028 届本科生，软件工程专业。正在猛猛学习～～</p>
+        <p class='text-muted-foreground'>
+          福州大学在读，2028 届本科生，软件工程专业。正在猛猛学习～～
+        </p>
         <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
+      </Section>
+      <Section title='Works'>
+        <ProjectSection
+          projects={[
+            {
+              name: 'Shotmeld',
+              description: '高颜值的在线照片存储与管理平台',
+              links: [
+                { type: 'github', href: 'https://github.com/ShotMeld/Shotmeld-web' },
+                { type: 'site', href: 'https://shotmeld.seeridia.top' }
+                // {
+                //   type: 'doc',
+                //   href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/blog/customize/index.md'
+                // }
+              ]
+            },
+            {
+              name: 'Alto',
+              description: '为 typora 编辑器精心设计的主题，专注于提升写作与思考的沉浸体验',
+              links: [
+                { type: 'github', href: 'https://github.com/Seeridia/typora-theme-alto' },
+                { type: 'site', href: 'https://theme.typora.io/theme/Alto' },
+                {
+                  type: 'doc',
+                  href: 'https://github.com/Seeridia/typora-theme-alto/blob/main/README.md'
+                }
+              ]
+            },
+            {
+              name: 'Clipboard Viewer',
+              description: '剪切板内容解析、调试工具',
+              links: [
+                { type: 'github', href: 'https://github.com/Seeridia/Clipboard-Viewer' },
+                { type: 'site', href: 'https://clipboard-viewer.seeridia.top/' }
+              ]
+            },
+            {
+              name: 'Cardify',
+              description: '什么东西都没有的什么新坑',
+              links: [
+                { type: 'github', href: 'https://github.com/Seeridia/Cardify' }
+                // { type: 'site', href: 'https://cardify.top/' }
+              ]
+            }
+          ]}
+        />
+      </Section>
+      <Section title='Contributions'>
+        <ProjectSection
+          projects={[
+            {
+              name: 'Tencent / Cherry Markdown',
+              description: 'Javascript Markdown 编辑器',
+              links: [
+                { type: 'github', href: 'https://github.com/Tencent/cherry-markdown' },
+                {
+                  type: 'release',
+                  href: 'https://www.npmjs.com/package/cherry-markdown'
+                },
+                {
+                  type: 'doc',
+                  href: 'https://github.com/Tencent/cherry-markdown/wiki'
+                }
+              ]
+            },
+            {
+              name: 'west2-online / fzuhelper-app',
+              description: 'Javascript Markdown 编辑器',
+              links: [
+                { type: 'github', href: 'https://github.com/west2-online/fzuhelper-app' },
+                {
+                  type: 'release',
+                  href: 'https://fzuhelper.w2fzu.com/'
+                }
+              ]
+            }
+          ]}
+        />
+        <Button title='More Repositories' class='w-fit self-end' href='https://github.com/Seeridia?tab=repositories' style='ahead' />
       </Section>
       {
         allPostsByDate.length > 0 && (
