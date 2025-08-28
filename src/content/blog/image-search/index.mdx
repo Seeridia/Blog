@@ -78,7 +78,39 @@ import { MdxRepl } from 'astro-pure/user'
 
 流程如下
 
-![](diagram.svg)
+```mermaid
+graph TB
+    subgraph A ["照片索引阶段 (一次性处理) "]
+        direction LR
+        Photos([个人照片库]) --> API{{调用图像打标 API, 如: 阿里云}}
+        API --> Tags[返回图片标签, 例如: '河流', '小船']
+        Tags --> DB[(标签数据库)]
+        Photos -- 路径/ID --> DB
+    end
+
+    A --> B
+
+    subgraph B ["用户搜索阶段 (实时查询) "]
+        direction TB
+        UserInput([用户输入自然语言: '在河边的日落']) --> Prompt
+        DB -- 提取所有可用标签 --> Prompt
+        Prompt{{组合成 Prompt}} --> LLM[请求 LLM 匹配]
+        LLM --> MatchedTags[LLM 返回最匹配的标签,例如: '河流', '日落']
+        MatchedTags --> SearchDB{{查询标签数据库}}
+        DB -- 被查询 --> SearchDB
+        SearchDB --> Results[找到所有匹配的图片]
+        Results --> Display([向用户展示结果])
+    end
+
+    %% ====== 样式美化 ======
+    style A fill:#fff8dc,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style B fill:#e6f2ff,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style DB fill:#f9c,stroke:#333,stroke-width:2px
+    style LLM fill:#bbf,stroke:#333,stroke-width:2px
+    style UserInput fill:#eee,stroke:#666,rx:8,ry:8
+    style Display fill:#eee,stroke:#666,rx:8,ry:8
+
+```
 
 流程很好解决，接下来就是一些细节的处理
 

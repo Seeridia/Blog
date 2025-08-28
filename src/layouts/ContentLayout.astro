@@ -101,6 +101,41 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
     toggleSidebar()
   })
 </script>
+<!-- Client-side mermaid loader (CDN) -->
+<script is:inline type="module">
+  const MERMAID_CDN = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'
+
+  try {
+    const { default: mermaid } = await import(/* @vite-ignore */ MERMAID_CDN)
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' })
+
+    const renderMermaids = () => {
+      const containers = Array.from(document.querySelectorAll('div[data-language="mermaid"]'))
+      for (const container of containers) {
+        const codeNode = container.querySelector('pre code')
+        if (!codeNode) continue
+        const code = codeNode.textContent || ''
+
+        const mermaidDiv = document.createElement('div')
+        mermaidDiv.className = 'mermaid'
+        mermaidDiv.textContent = code
+
+        container.replaceWith(mermaidDiv)
+        try {
+          mermaid.init(undefined, mermaidDiv)
+        } catch (e) {
+          console.error('mermaid render error', e)
+        }
+      }
+    }
+
+    renderMermaids()
+    const observer = new MutationObserver(renderMermaids)
+    observer.observe(document.body, { childList: true, subtree: true })
+  } catch (err) {
+    console.warn('Failed to load mermaid from CDN', err)
+  }
+</script>
 <style>
   @media (min-width: 769px) {
     #sidebar-shade {
