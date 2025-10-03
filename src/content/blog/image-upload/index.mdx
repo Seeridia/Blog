@@ -21,32 +21,53 @@ import { LinkPreview } from 'astro-pure/advanced'
 
 ```mermaid
 sequenceDiagram
-    participant 客户端
-    participant 服务器
-    participant OSS同步模块
-    participant EXIF处理模块
-    participant AI标签模块
-    participant 阿里云OSS
-    participant 高德API
-    participant 阿里云图像识别API
+    autonumber
+    title Shotmeld 照片上传与智能处理流程
 
-    客户端->>服务器: 上传图片
-    服务器->>服务器: 处理相册关联
-    服务器->>服务器: 生成缩略图
-    服务器->>客户端: 返回上传成功响应
-    服务器->>OSS同步模块: 异步上传原图到OSS
-    OSS同步模块->>阿里云OSS: 上传原图
-    阿里云OSS-->>OSS同步模块: 返回上传结果
-    OSS同步模块->>服务器: 更新图片URL
-    服务器->>EXIF处理模块: 异步解析EXIF信息
-    EXIF处理模块->>EXIF处理模块: 经纬度火星坐标转换
-    EXIF处理模块->>高德API: 提交逆地理编码请求
-    高德API-->>EXIF处理模块: 返回地理信息
-    EXIF处理模块->>服务器: 更新EXIF数据
-    服务器->>AI标签模块: 异步调用图像识别API
-    AI标签模块->>阿里云图像识别API: 提交图片进行标签识别
-    阿里云图像识别API-->>AI标签模块: 返回识别标签
-    AI标签模块->>服务器: 将标签保存到数据库
+    participant Client as 客户端<br>(Web / App)
+    participant Server as 服务端<br>(主控协调)
+    participant OSSUploader as OSS同步模块<br>(异步上传)
+    participant EXIFProcessor as EXIF处理模块<br>(坐标+逆地理)
+    participant AITagger as AI标签模块<br>(图像识别)
+    participant AliyunOSS as 阿里云OSS<br>(原图存储)
+    participant GaodeAPI as 高德API<br>(逆地理编码)
+    participant ImageAI as 阿里云图像识别API<br>(智能打标)
+
+    Client ->> Server: 1. 上传图片 (multipart/form-data)
+    activate Server
+    Server ->> Server: 2. 关联相册 + 生成缩略图<br>快速响应准备
+    Server -->> Client: 3. 返回“上传成功”
+    deactivate Server
+
+    Note over Client,Server: 第3步返回的图片URL指向<strong>服务端本地存储</strong>，<br>由服务端直接提供文件访问，确保用户“秒级预览”
+
+    par OSS 上传流程
+        Server ->> OSSUploader: 4. 异步：上传原图至OSS
+        activate OSSUploader
+        OSSUploader ->> AliyunOSS: 5. 上传原始图片
+        AliyunOSS -->> OSSUploader: 6. 返回OSS URL
+        OSSUploader ->> Server: 7. 更新数据库：图片URL切换至OSS地址
+        deactivate OSSUploader
+    and EXIF 解析流程
+        Server ->> EXIFProcessor: 8. 异步：解析EXIF元数据
+        activate EXIFProcessor
+        EXIFProcessor ->> EXIFProcessor: 9. 火星坐标 → WGS84<br>坐标纠偏
+        EXIFProcessor ->> GaodeAPI: 10. 请求逆地理编码<br>经纬度 → 省市区街道
+        GaodeAPI -->> EXIFProcessor: 11. 返回结构化地址
+        EXIFProcessor ->> Server: 12. 更新地理标签与拍摄地点
+        deactivate EXIFProcessor
+    and AI 标签识别流程
+        Server ->> AITagger: 13. 异步：图像内容识别
+        activate AITagger
+        AITagger ->> ImageAI: 14. 提交图片URL<br>物体/场景/OCR识别
+        ImageAI -->> AITagger: 15. 返回标签列表<br>如：“猫, 窗户, 阳光”
+        AITagger ->> Server: 16. 保存AI标签至数据库
+        deactivate AITagger
+    end
+
+    Note over Server,AliyunOSS: 第7步完成后，<strong>所有图片访问切换至阿里云OSS</strong>，<br>服务端释放存储与带宽压力，实现“前端快响应，后端稳迁移”
+
+    Note right of Server: 最终成果：<br>• 图片通过OSS访问<br>• 带地理位置<br>• 带AI智能标签<br>• 支持搜索与推荐
 ```
 
 下面开始讲讲思考
