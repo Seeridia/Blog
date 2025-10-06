@@ -10,6 +10,7 @@ import SkillLayout from '@/components/home/SkillLayout.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 import avatar from '@/assets/avatar.webp'
 import config from '@/site-config'
+import '@/assets/styles/hero.css'
 
 const frontendDevelopment = ['Vue.js', 'React.js', 'TypeScript', 'JavaScript', 'CSS', 'HTML']
 const backendDevelopment = ['Node.js']
@@ -69,7 +70,6 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             />
             <div class='content-hero__portrait-glass' aria-hidden='true'></div>
           </div>
-
         </div>
       </div>
     </section>
