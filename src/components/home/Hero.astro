@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets'
+import { Icon } from 'astro-pure/user'
+import avatar from '@/assets/avatar.webp'
+import config from '@/site-config'
+import '@/assets/styles/hero.css'
+---
+
+<section id='content-header' class='content-hero animate'>
+  <span class='content-hero__halo content-hero__halo--top' aria-hidden='true'></span>
+  <span class='content-hero__halo content-hero__halo--bottom' aria-hidden='true'></span>
+  <div class='content-hero__mouse-glow' aria-hidden='true'></div>
+  <div class='content-hero__click-ripple' aria-hidden='true'></div>
+
+  <div class='content-hero__inner'>
+    <div class='content-hero__copy'>
+      <span class='content-hero__eyebrow'>Developer & designer</span>
+      <h1 class='content-hero__title'>{config.author}</h1>
+      <p class='content-hero__subtitle'>
+        <span>To wonder, and to feel.</span>
+        <span>去思索，也去感受。</span>
+      </p>
+
+      <ul class='content-hero__meta'>
+        <li>
+          <span class='content-hero__meta-item'>
+            <Icon name='location' class='size-5' />
+            <span>中国 · 福州</span>
+          </span>
+        </li>
+        <li>
+          <a
+            class='content-hero__meta-item'
+            href='https://github.com/Seeridia'
+            target='_blank'
+            rel='noreferrer'
+          >
+            <Icon name='github' class='size-5' />
+            <span>GitHub</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class='content-hero__visual'>
+      <div class='content-hero__portrait'>
+        <Image
+          src={avatar}
+          alt='Seeridia portrait'
+          class='content-hero__avatar'
+          loading='eager'
+        />
+        <div class='content-hero__portrait-glass' aria-hidden='true'></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const hero = document.querySelector('.content-hero') as HTMLElement
+  const mouseGlow = document.querySelector('.content-hero__mouse-glow') as HTMLElement
+
+  if (hero && mouseGlow) {
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+
+      mouseGlow.style.setProperty('--mouse-x', `${x}px`)
+      mouseGlow.style.setProperty('--mouse-y', `${y}px`)
+      mouseGlow.style.opacity = '1'
+    })
+
+    hero.addEventListener('mouseleave', () => {
+      mouseGlow.style.opacity = '0'
+    })
+
+    // Apple-style click ripple effect
+    hero.addEventListener('click', (e) => {
+      const rect = hero.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+
+      const ripple = document.createElement('div')
+      ripple.className = 'content-hero__ripple'
+      ripple.style.left = `${x}px`
+      ripple.style.top = `${y}px`
+
+      hero.appendChild(ripple)
+
+      // Remove ripple after animation
+      setTimeout(() => {
+        ripple.remove()
+      }, 1000)
+    })
+  }
+</script>

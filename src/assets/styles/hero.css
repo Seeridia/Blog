@@ -47,6 +47,108 @@ html.dark .content-hero__halo {
     filter: blur(6px);
 }
 
+.content-hero__mouse-glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+            rgba(102, 158, 185, 0.35) 0%,
+            rgba(102, 158, 185, 0.22) 25%,
+            rgba(102, 158, 185, 0.08) 50%,
+            rgba(102, 158, 185, 0) 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    transform: translate(-50%, -50%);
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+    z-index: 0;
+    filter: blur(40px);
+}
+
+html.dark .content-hero__mouse-glow {
+    background: radial-gradient(circle,
+            rgba(118, 176, 204, 0.25) 0%,
+            rgba(118, 176, 204, 0.15) 30%,
+            rgba(118, 176, 204, 0.05) 55%,
+            rgba(118, 176, 204, 0) 70%);
+    filter: blur(50px);
+}
+
+.content-hero__ripple {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 10;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle,
+            rgba(102, 158, 185, 0.5) 0%,
+            rgba(102, 158, 185, 0.3) 30%,
+            rgba(102, 158, 185, 0.12) 60%,
+            rgba(102, 158, 185, 0) 100%);
+    filter: blur(1px);
+    animation: ripple-expand 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes ripple-expand {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+        filter: blur(1px);
+    }
+
+    30% {
+        opacity: 0.95;
+        filter: blur(8px);
+    }
+
+    60% {
+        opacity: 0.6;
+        filter: blur(20px);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+        filter: blur(30px);
+    }
+}
+
+html.dark .content-hero__ripple {
+    background: radial-gradient(circle,
+            rgba(118, 176, 204, 0.6) 0%,
+            rgba(118, 176, 204, 0.4) 30%,
+            rgba(118, 176, 204, 0.15) 60%,
+            rgba(118, 176, 204, 0) 100%);
+    animation: ripple-expand-dark 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes ripple-expand-dark {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+        filter: blur(1px);
+    }
+
+    30% {
+        opacity: 1;
+        filter: blur(10px);
+    }
+
+    60% {
+        opacity: 0.7;
+        filter: blur(25px);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+        filter: blur(40px);
+    }
+}
 .content-hero__visual {
     display: none;
 }

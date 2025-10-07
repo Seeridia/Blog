@@ -1,16 +1,12 @@
 ---
-import { Image } from 'astro:assets'
-
 import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import { Button, Card, Icon } from 'astro-pure/user'
+import { Button, Card } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
-import avatar from '@/assets/avatar.webp'
-import config from '@/site-config'
-import '@/assets/styles/hero.css'
+import Hero from '@/components/home/Hero.astro'
 
 const frontendDevelopment = ['Vue.js', 'React.js', 'TypeScript', 'JavaScript', 'CSS', 'HTML']
 const backendDevelopment = ['Node.js']
@@ -23,57 +19,9 @@ const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
-
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
-    <section id='content-header' class='content-hero animate'>
-      <span class='content-hero__halo content-hero__halo--top' aria-hidden='true'></span>
-      <span class='content-hero__halo content-hero__halo--bottom' aria-hidden='true'></span>
-
-      <div class='content-hero__inner'>
-        <div class='content-hero__copy'>
-          <span class='content-hero__eyebrow'>Developer & designer</span>
-          <h1 class='content-hero__title'>{config.author}</h1>
-          <p class='content-hero__subtitle'>
-            <span>To wonder, and to feel.</span>
-            <span>去思索，也去感受。</span>
-          </p>
-
-          <ul class='content-hero__meta'>
-            <li>
-              <span class='content-hero__meta-item'>
-                <Icon name='location' class='size-5' />
-                <span>中国 · 福州</span>
-              </span>
-            </li>
-            <li>
-              <a
-                class='content-hero__meta-item'
-                href='https://github.com/Seeridia'
-                target='_blank'
-                rel='noreferrer'
-              >
-                <Icon name='github' class='size-5' />
-                <span>GitHub</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class='content-hero__visual'>
-          <div class='content-hero__portrait'>
-            <Image
-              src={avatar}
-              alt='Seeridia portrait'
-              class='content-hero__avatar'
-              loading='eager'
-            />
-            <div class='content-hero__portrait-glass' aria-hidden='true'></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    <Hero/>
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-7/8'>
       <Section title='About'>
         <p class='text-muted-foreground'>👋 Hi, 我是 Seeridia!</p>
