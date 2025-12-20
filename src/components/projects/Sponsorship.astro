@@ -10,7 +10,7 @@ interface Props {
   methods: {
     name: string
     icon: string
-    image: ImageMetadata
+    image: ImageMetadata | string
   }[]
 }
 
@@ -24,12 +24,21 @@ const { class: className, methods, ...props } = Astro.props
         <div class='sponsorship-card-icon absolute bottom-0 end-0 start-0 top-0 flex items-center justify-center transition-opacity'>
           <Icon class='size-20' name={item.icon as iconsType} />
         </div>
-        <Image
-          class='sponsorship-card-img mx-auto my-0 max-w-60 blur-sm transition-opacity'
-          src={item.image}
-          alt={item.name}
-          loading='lazy'
-        />
+        {typeof item.image === 'string' ? (
+          <img
+            class='sponsorship-card-img mx-auto my-0 max-w-60 blur-sm transition-opacity'
+            src={item.image}
+            alt={item.name}
+            loading='lazy'
+          />
+        ) : (
+          <Image
+            class='sponsorship-card-img mx-auto my-0 max-w-60 blur-sm transition-opacity'
+            src={item.image}
+            alt={item.name}
+            loading='lazy'
+          />
+        )}
       </div>
     ))
   }

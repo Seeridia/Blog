@@ -1,15 +1,16 @@
 ---
-import { socialLinks, type iconsType } from 'astro-pure/types'
+import { type iconsType } from 'astro-pure/types'
 import { Icon } from 'astro-pure/user'
 
 interface SubstatsItem {
   platform: string
-  icon: (typeof socialLinks)[number]
+  // allow either a known iconsType or a custom string (e.g. 'qq')
+  icon: iconsType | string
   color?: string
   link?: string
   text: string
   api?: string
-  count?: number
+  count?: number | string
 }
 
 type Props = {
@@ -46,7 +47,14 @@ await Promise.all(stats.map(fetchCount))
         rel='noopener noreferrer'
       >
         <div class='flex items-center gap-3 rounded-lg border border-transparent px-3 py-2 transition-all hover:border-border hover:bg-muted'>
-          {icon && <Icon name={icon as iconsType} color={color} />}
+          {icon ? (
+            // if icon is a raw svg string (import ...?raw), render it directly
+            typeof icon === 'string' && icon.trim().startsWith('<svg') ? (
+              <span set:html={icon} />
+            ) : (
+              <Icon name={icon as unknown as iconsType} color={color} />
+            )
+          ) : null}
           <div class='flex-1 text-foreground transition-colors group-hover:text-primary'>
             {platform}
           </div>
@@ -62,12 +70,4 @@ await Promise.all(stats.map(fetchCount))
       </a>
     ))
   }
-</div>
-<div class='mt-2 text-right text-sm'>
-  Display real-time; powered by <a
-    class='text-muted-foreground'
-    href='http://github.com/spencerwooo/substats'
-    target='_blank'
-    rel='noopener noreferrer'>Substats</a
-  >
 </div>

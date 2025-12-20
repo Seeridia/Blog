@@ -1,7 +1,6 @@
 ---
 // import { ClientRouter } from 'astro:transitions'
 
-import { prod } from 'astro-pure/server'
 import type { SiteMeta } from 'astro-pure/types'
 import config from '@/site-config'
 
@@ -103,7 +102,7 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
   })
 </script> -->
 
-{
+<!-- {
   /* User script*/
   prod && (
     <script>
@@ -112,4 +111,4 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
       'color:#000;background:linear-gradient(90deg,#44e9ff,#ffffff);padding:5px 10px 5px 0px;' )
     </script>
   )
-}
+} -->

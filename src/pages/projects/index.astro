@@ -1,11 +1,12 @@
 ---
-
+import { Spoiler } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
+import Sponsorship from '@/components/projects/Sponsorship.astro'
 
 const headings = [
   { depth: 2, slug: 'MyWorks', text: 'My Works' },
-  { depth: 2, slug: 'MyContributions', text: 'My Contributions' },
+  { depth: 2, slug: 'MyContributions', text: 'My Contributions' }
 ]
 ---
 
@@ -25,8 +26,9 @@ const headings = [
   <Button title='Checkout sponsorship' class='w-fit' href='#sponsorship'>
     <Icon class='size-5' name='receive-money' slot='before' />
   </Button> -->
+  <p>这边存放着我在进入大学以来的大部分项目，有些或许是整活的，有些只是小玩具～～</p>
 
-  <h2 id='MyWorks'>My Works</h2>
+  <h2 id='MyWorks' class='text-2xl'>My Works</h2>
   <ProjectSection
     projects={[
       {
@@ -63,16 +65,28 @@ const headings = [
       },
       {
         name: 'Cardify',
-        description: '什么东西都没有的什么新坑',
+        description:
+          '什么东西都没有的什么新坑，我也不知道为什么我要放这个，估计是为了 push 自己要开工了',
         links: [
           { type: 'github', href: 'https://github.com/Seeridia/Cardify' }
           // { type: 'site', href: 'https://cardify.top/' }
         ]
+      },
+      {
+        name: 'maynooth-moodle-ics',
+        description:
+          'Maynooth Moodle Schedule Subscription 日程订阅，将你的 Task 订阅到你的日历应用中',
+        links: [{ type: 'github', href: 'https://github.com/Seeridia/maynooth-moodle-ics' }]
+      },
+      {
+        name: 'Other Projects',
+        description: '去看看我的仓库？',
+        links: [{ type: 'github', href: 'https://github.com/Seeridia?tab=repositories' }]
       }
     ]}
   />
 
-  <h2 id='MyContributions'>My Contributions</h2>
+  <h2 id='MyContributions' class='text-2xl'>My Contributions</h2>
   <ProjectSection
     projects={[
       {
@@ -101,6 +115,15 @@ const headings = [
           }
         ]
       }
+    ]}
+  />
+
+  <h2 id='sponsorship' class='text-2xl'>赞赏</h2>
+  <p><Spoiler>（真的会有人给我米的吗）</Spoiler></p>
+  <Sponsorship
+    methods={[
+      { name: 'WeChat', icon: 'wechat-pay', image: '/images/sponsorship/wechat-pay.jpg' },
+      { name: 'Alipay', icon: 'alipay', image: '/images/sponsorship/alipay.jpg' }
     ]}
   />
 

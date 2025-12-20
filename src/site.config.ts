@@ -1,4 +1,4 @@
-import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types';
+import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
@@ -15,7 +15,7 @@ export const theme: ThemeUserConfig = {
     lang: 'zh-CN',
     attrs: 'zh_CN',
     // Date locale
-    dateLocale: 'zh-CN',
+    dateLocale: 'en-US',
     dateOptions: {
       day: 'numeric',
       month: 'short',
@@ -60,22 +60,15 @@ export const theme: ThemeUserConfig = {
     year: `© ${new Date().getFullYear()}`,
     // year: `© 2019 - ${new Date().getFullYear()}`,
     links: [
-      // Registration link
       {
         title: '闽ICP备2025099091号',
         link: 'https://beian.miit.gov.cn',
-        style: 'text-sm' // Uno/TW CSS class
+        style: 'text-xs'
       },
       {
         title: '闽公网安备35018302000247号',
         link: 'https://beian.mps.gov.cn/#/query/webSearch?code=35018302000247',
-        style: 'text-sm' // Uno/TW CSS class
-      },
-      // Privacy Policy link
-      {
-        title: 'Site Policy',
-        link: '/terms/list',
-        pos: 2 // position set to 2 will be appended to copyright line
+        style: 'text-xs'
       }
     ],
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
@@ -167,28 +160,6 @@ export const integ: IntegrationUserConfig = {
       imageUploader: true
     }
   }
-}
-
-export const terms: CardListData = {
-  title: 'Terms content',
-  list: [
-    {
-      title: 'Privacy Policy',
-      link: '/terms/privacy-policy'
-    },
-    {
-      title: 'Terms and Conditions',
-      link: '/terms/terms-and-conditions'
-    },
-    {
-      title: 'Copyright',
-      link: '/terms/copyright'
-    },
-    {
-      title: 'Disclaimer',
-      link: '/terms/disclaimer'
-    }
-  ]
 }
 
 const config = { ...theme, integ } as Config

@@ -75,7 +75,6 @@ import '@/assets/styles/hero.css'
       mouseGlow.style.opacity = '0'
     })
 
-    // Apple-style click ripple effect
     hero.addEventListener('click', (e) => {
       const rect = hero.getBoundingClientRect()
       const x = e.clientX - rect.left
@@ -88,7 +87,6 @@ import '@/assets/styles/hero.css'
 
       hero.appendChild(ripple)
 
-      // Remove ripple after animation
       setTimeout(() => {
         ripple.remove()
       }, 1000)
