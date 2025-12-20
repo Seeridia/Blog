@@ -13,22 +13,27 @@ const headings = [
 ]
 
 const { friends } = links
-const linksConf = config.integ.links
-const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/public/links.json'
+// Provide safe defaults in case `links` or `config.integ.links` are missing
+const linksConf = config.integ.links || { logbook: [], applyTip: [] }
+const linkEditPage = 'https://github.com/Seeridia/Blog/blob/main/public/links.json'
 ---
 
 <PageLayout title='Links' {headings} comment>
   <p>怎么可能有顺序呢，当然是随机的~ It's random</p>
   <h2 id='common-links'>Common Links</h2>
-  <FriendList list={friends[0]} />
-  <Collapse title='Links with Bad Status'>
-    <FriendList list={friends[1]} />
-  </Collapse>
+  {friends && friends[0] && <FriendList list={friends[0]} />}
+  {
+    friends && friends[1] && (
+      <Collapse title='Links with Bad Status'>
+        <FriendList list={friends[1]} />
+      </Collapse>
+    )
+  }
   <Collapse title='Link History Book'>
     <Timeline events={linksConf.logbook} />
   </Collapse>
   <h2 id='special-links'>Special Links</h2>
-  <FriendList list={friends[2]} />
+  {friends && friends[2] && <FriendList list={friends[2]} />}
 
   <!-- apply-links -->
   <h2 id='apply-links'>Apply Links</h2>

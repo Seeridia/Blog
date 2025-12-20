@@ -39,7 +39,7 @@ const { title, list: friend_list, ...props } = Astro.props
               <div class='relative h-14 w-14 min-w-14 overflow-hidden rounded-full'>
                 <Image
                   class='my-0 bg-white'
-                  src={frd.avatar}
+                  src={frd.avatar || '/favicon/favicon.ico'}
                   height={80}
                   width={80}
                   alt='avatar'
@@ -82,7 +82,7 @@ const { title, list: friend_list, ...props } = Astro.props
             {/* avatar bg */}
             <Image
               class='absolute -start-2 top-0 z-0 my-0 h-full w-2/3 bg-white object-cover opacity-15'
-              src={frd.avatar}
+              src={frd.avatar || '/favicon/favicon.ico'}
               height={80}
               width={80}
               alt='avatar bg'

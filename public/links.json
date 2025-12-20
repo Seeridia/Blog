@@ -1,0 +1,16 @@
+{
+    "friends": [
+        {
+            "id_name": "",
+            "desc": "",
+            "link_list": [
+                {
+                    "name": "",
+                    "intro": "",
+                    "link": "",
+                    "avatar": ""
+                }
+            ]
+        }
+    ]
+}
