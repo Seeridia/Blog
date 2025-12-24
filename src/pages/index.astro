@@ -3,10 +3,10 @@ import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Card } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import Hero from '@/components/home/Hero.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
-import Hero from '@/components/home/Hero.astro'
 
 const frontendDevelopment = ['Vue.js', 'React.js', 'TypeScript', 'JavaScript', 'CSS', 'HTML']
 const backendDevelopment = ['Node.js']
@@ -19,9 +19,10 @@ const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
+
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
-    <Hero/>
+    <Hero />
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-7/8'>
       <Section title='About'>
         <p class='text-muted-foreground'>👋 Hi, 我是 Seeridia!</p>
@@ -30,6 +31,20 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         </p>
         <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
       </Section>
+      {
+        allPostsByDate.length > 0 && (
+          <Section title='Posts'>
+            <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
+              {allPostsByDate.map((p) => (
+                <li class='flex flex-col gap-x-2 sm:flex-row'>
+                  <PostPreview post={p} />
+                </li>
+              ))}
+            </ul>
+            <Button title='More posts' class='w-fit self-end' href='/blog' style='ahead' />
+          </Section>
+        )
+      }
       <Section title='Works'>
         <ProjectSection
           projects={[
@@ -64,9 +79,18 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             {
               name: 'Cardify',
               description: '什么东西都还没有的什么新坑',
-              links: [
-                { type: 'github', href: 'https://github.com/Seeridia/Cardify' }
-              ]
+              links: [{ type: 'github', href: 'https://github.com/Seeridia/Cardify' }]
+            },
+            {
+              name: 'maynooth-moodle-ics',
+              description:
+                'Maynooth Moodle Schedule Subscription 日程订阅，将你的 Task 订阅到你的日历应用中',
+              links: [{ type: 'github', href: 'https://github.com/Seeridia/maynooth-moodle-ics' }]
+            },
+            {
+              name: 'Other Projects',
+              description: '去看看我的仓库？',
+              links: [{ type: 'github', href: 'https://github.com/Seeridia?tab=repositories' }]
             }
           ]}
         />
@@ -102,22 +126,13 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             }
           ]}
         />
-        <Button title='More Repositories' class='w-fit self-end' href='https://github.com/Seeridia?tab=repositories' style='ahead' />
+        <Button
+          title='More Repositories'
+          class='w-fit self-end'
+          href='https://github.com/Seeridia?tab=repositories'
+          style='ahead'
+        />
       </Section>
-      {
-        allPostsByDate.length > 0 && (
-          <Section title='Posts'>
-            <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
-              {allPostsByDate.map((p) => (
-                <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <PostPreview post={p} />
-                </li>
-              ))}
-            </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' style='ahead' />
-          </Section>
-        )
-      }
       <Section title='Education'>
         <Card
           as='a'

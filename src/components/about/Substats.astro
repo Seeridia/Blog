@@ -8,7 +8,7 @@ interface SubstatsItem {
   icon: iconsType | string
   color?: string
   link?: string
-  text: string
+  text?: string
   api?: string
   count?: number | string
 }
@@ -61,7 +61,7 @@ await Promise.all(stats.map(fetchCount))
           {count ? (
             <div class='flex items-center gap-1.5'>
               <samp>{count}</samp>
-              <span class='text-sm font-normal'>{text}</span>
+              <span class='text-sm font-normal'>{text ?? ''}</span>
             </div>
           ) : (
             'null'

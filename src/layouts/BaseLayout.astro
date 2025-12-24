@@ -26,7 +26,11 @@ const {
     <ThemeProvider />
   </head>
 
-  <body class='flex justify-center bg-background text-foreground' {...props}>
+  <body
+    class='flex justify-center bg-background text-foreground'
+    style='text-autospace: normal;'
+    {...props}
+  >
     {
       highlightColor && (
         <div
