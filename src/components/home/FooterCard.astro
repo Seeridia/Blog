@@ -1,0 +1,58 @@
+---
+
+---
+
+<section class='footer-card'>
+  <div id='container' class='w-full overflow-hidden whitespace-nowrap'>
+    <span id='text' class='inline-block origin-left-top font-semibold' data-splitting>
+      Seeridia
+    </span>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  import Splitting from 'splitting'
+
+  gsap.registerPlugin(ScrollTrigger)
+
+  const container = document.getElementById('container')
+  const text = document.getElementById('text')
+
+  if (container && text) {
+    // 拆分文字
+    Splitting({ target: text, by: 'chars' })
+
+    const chars = text.querySelectorAll('.char')
+
+    // GSAP 滚动动画
+    gsap.from(chars, {
+      scrollTrigger: {
+        trigger: container,
+        start: 'top 90%',
+        toggleActions: 'play none none none'
+      },
+      y: 20,
+      opacity: 0,
+      duration: 1.2,
+      stagger: 0.06,
+      ease: 'power3.out'
+    })
+
+    // 缩放文本
+    const resizeObserver = new ResizeObserver(() => {
+      const scale = container.offsetWidth / text.offsetWidth
+      text.style.transform = `scale(${scale})`
+      container.style.height = text.offsetHeight * scale + 'px'
+    })
+
+    resizeObserver.observe(container)
+  }
+</script>
+
+<style>
+  .footer-card :global(.char) {
+    display: inline-block;
+  }
+</style>

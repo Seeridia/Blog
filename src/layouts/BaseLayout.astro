@@ -8,6 +8,8 @@ import config from '@/site-config'
 // all pages through the use of the <BaseLayout /> component.
 import '@/assets/styles/app.css'
 
+import FooterCard from '@/components/home/FooterCard.astro'
+
 interface Props {
   meta: SiteMeta
   highlightColor?: string
@@ -44,6 +46,7 @@ const {
       <Header />
       <slot />
       <Footer />
+      <FooterCard />
     </div>
 
     {/* Set highlight color */}
