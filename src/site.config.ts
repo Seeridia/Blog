@@ -63,12 +63,10 @@ export const theme: ThemeUserConfig = {
       {
         title: '闽ICP备2025099091号',
         link: 'https://beian.miit.gov.cn',
-        style: 'text-xs'
       },
       {
         title: '闽公网安备35018302000247号',
         link: 'https://beian.mps.gov.cn/#/query/webSearch?code=35018302000247',
-        style: 'text-xs'
       }
     ],
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
