@@ -1,4 +1,4 @@
-import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types';
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
@@ -6,9 +6,7 @@ export const theme: ThemeUserConfig = {
   title: "Seeridia's Home",
   /** Will be used in index page & copyright declaration */
   author: 'Seeridia',
-  /** Description metadata for your website. Can be used in page metadata. */
-  description: 'Seeridia 的领地！',
-  /** The default favicon for your site which should be a path to an image in the `public/` directory. */
+  description: 'Seeridia 的小小小的大窝！',
   favicon: '/favicon/favicon.ico',
   /** Specify the default language for this site. */
   locale: {
@@ -49,7 +47,7 @@ export const theme: ThemeUserConfig = {
     menu: [
       { title: 'Blog', link: '/blog' },
       { title: 'Projects', link: '/projects' },
-      // { title: 'Links', link: '/links' },
+      { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' }
     ]
   },
@@ -94,21 +92,17 @@ export const theme: ThemeUserConfig = {
 export const integ: IntegrationUserConfig = {
   // Links management
   // See: https://astro-pure.js.org/docs/integrations/links
-  // links: {
-  //   // Friend logbook
-  //   logbook: [
-  //     { date: '2024-07-01', content: 'Lorem ipsum dolor sit amet.' },
-  //     { date: '2024-07-01', content: 'vidit suscipit at mei.' },
-  //     { date: '2024-07-01', content: 'Quem denique mea id.' }
-  //   ],
-  //   // Yourself link info
-  //   applyTip: [
-  //     { name: 'Name', val: theme.title },
-  //     { name: 'Desc', val: theme.description || 'Null' },
-  //     { name: 'Link', val: 'https://astro-pure.js.org/' },
-  //     { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
-  //   ]
-  // },
+  links: {
+    // Friend logbook
+    logbook: [
+    ],
+    applyTip: [
+      { name: 'Name', val: theme.title },
+      { name: 'Desc', val: theme.description || 'Null' },
+      { name: 'Link', val: 'https://blog.seeridia.top' },
+      { name: 'Avatar', val: 'https://www.github.com/Seeridia.png' }
+    ]
+  },
   // Enable page search function
   pagefind: true,
   // Add a random quote to the footer (default on homepage footer)
@@ -148,12 +142,12 @@ export const integ: IntegrationUserConfig = {
     emoji: ['bmoji', 'weibo'],
     // Refer https://waline.js.org/en/reference/client/props.html
     additionalConfigs: {
-      // search: false,
+      search: false,
       pageview: true,
       comment: true,
       locale: {
         reaction0: 'Like',
-        placeholder: 'Welcome to comment. (Email to receive replies. Login is unnecessary)'
+        placeholder: '其实在这边的评论我也不知道自己会不会看到……',
       },
       imageUploader: true
     }

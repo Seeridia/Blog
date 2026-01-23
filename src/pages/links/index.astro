@@ -2,15 +2,8 @@
 import links from 'public/links.json'
 import config from 'virtual:config'
 
-import { Collapse, Timeline } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
-
-const headings = [
-  { depth: 2, slug: 'common-links', text: 'Common Links' },
-  { depth: 2, slug: 'special-links', text: 'Special Links' },
-  { depth: 2, slug: 'apply-links', text: 'Apply Links' }
-]
 
 const { friends } = links
 // Provide safe defaults in case `links` or `config.integ.links` are missing
@@ -18,26 +11,25 @@ const linksConf = config.integ.links || { logbook: [], applyTip: [] }
 const linkEditPage = 'https://github.com/Seeridia/Blog/blob/main/public/links.json'
 ---
 
-<PageLayout title='Links' {headings} comment>
-  <p>怎么可能有顺序呢，当然是随机的~ It's random</p>
-  <h2 id='common-links'>Common Links</h2>
+<PageLayout title='Links' comment>
+  <p>下面是我的好朋友们！</p>
   {friends && friends[0] && <FriendList list={friends[0]} />}
-  {
+  <!-- {
     friends && friends[1] && (
       <Collapse title='Links with Bad Status'>
         <FriendList list={friends[1]} />
       </Collapse>
     )
-  }
-  <Collapse title='Link History Book'>
+  } -->
+  <!-- <Collapse title='Link History Book'>
     <Timeline events={linksConf.logbook} />
-  </Collapse>
-  <h2 id='special-links'>Special Links</h2>
-  {friends && friends[2] && <FriendList list={friends[2]} />}
+  </Collapse> -->
+  <!-- <h2 id='special-links'>Special Links</h2> -->
+  <!-- {friends && friends[2] && <FriendList list={friends[2]} />} -->
 
   <!-- apply-links -->
   <h2 id='apply-links'>Apply Links</h2>
-  <p>本站信息（点击复制）The site information (click to copy)：</p>
+  <p>本站信息（点击复制）：</p>
   <blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4'>
     {
       linksConf.applyTip.map(({ name, val }) => {
@@ -54,15 +46,7 @@ const linkEditPage = 'https://github.com/Seeridia/Blog/blob/main/public/links.js
     }
   </blockquote>
 
-  <p>
-    可通过下方留言或 <a href={linkEditPage} target='_blank'>提交 PR</a> 申请友链。此外申请说明：<br
-    />
-    Apply your link by leaving comment or <a href={linkEditPage} target='_blank'>Submitting a PR</a
-    >. Additional info:
-  </p>
-  <ul>
-    <li>在你的友链上添加了本站. You've recommended this site on your website.</li>
-    <li>请确保你的站点活着. Make sure your site is alive.</li>
-    <li>博客内容不违反国家法律. Content does not violate common laws.</li>
-  </ul>
+  <p>可通过下方留言或 <a href={linkEditPage} target='_blank'>提交 PR</a> 申请友链。</p>
+  <p>当然，如果你有我的联系方式的话就直接发我呗。</p>
+  <p>要没必要有啥，不管是博客、主页，或是一个知乎的主页也行</p>
 </PageLayout>

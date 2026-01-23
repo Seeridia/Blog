@@ -1,14 +1,44 @@
 {
     "friends": [
         {
-            "id_name": "",
-            "desc": "",
+            "id_name": "Links",
+            "desc": "Friend link",
             "link_list": [
                 {
-                    "name": "",
+                    "name": "小海的角落",
+                    "intro": "一个小角落",
+                    "link": "https://norubias.site",
+                    "avatar": "https://www.github.com/ourcx.png"
+                },
+                {
+                    "name": "Seeridia 小小的大窝",
+                    "intro": "其实是本人啦",
+                    "link": "https://www.seeridia.top",
+                    "avatar": "https://www.github.com/seeridia.png"
+                },
+                {
+                    "name": "PurplePlanen",
                     "intro": "",
-                    "link": "",
-                    "avatar": ""
+                    "link": "https://www.purpleplanen.top",
+                    "avatar": "https://www.github.com/PurplePlanen.png"
+                },
+                {
+                    "name": "Binbim的个人主页",
+                    "intro": "一个职高三年级全栈er",
+                    "link": "https://home.binbim.top,",
+                    "avatar": "https://q1.qlogo.cn/g?b=qq&amp;nk=1721822150&amp;s=640"
+                },
+                {
+                    "name": "洛不出来的知乎主页",
+                    "intro": "洛不出来",
+                    "link": "https://www.zhihu.com/people/ha-ha-ha-51-72-60",
+                    "avatar": "https://pica.zhimg.com/v2-fb0162a052b711e3aaf6bdaa395d35cd_l.jpg?source=32738c0c"
+                },
+                {
+                    "name": "huizhi's Aside",
+                    "intro": "只是一些碎碎念吧",
+                    "link": "https://blog.huizhi.ink",
+                    "avatar": "https://cdn.jsdelivr.net/gh/huizhiLLL/Photo-bed@main/img/avatar1.png"
                 }
             ]
         }
