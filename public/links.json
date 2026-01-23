@@ -25,7 +25,7 @@
                 {
                     "name": "Binbim的个人主页",
                     "intro": "一个职高三年级全栈er",
-                    "link": "https://home.binbim.top,",
+                    "link": "https://home.binbim.top",
                     "avatar": "https://q1.qlogo.cn/g?b=qq&amp;nk=1721822150&amp;s=640"
                 },
                 {
@@ -39,6 +39,12 @@
                     "intro": "只是一些碎碎念吧",
                     "link": "https://blog.huizhi.ink",
                     "avatar": "https://cdn.jsdelivr.net/gh/huizhiLLL/Photo-bed@main/img/avatar1.png"
+                },
+                {
+                    "name": "Krison's Blog",
+                    "intro": "天地有大美而不言",
+                    "link": "krisonzhang.cn",
+                    "avatar": "https://www.github.com/zmlxzyh.png"
                 }
             ]
         }
