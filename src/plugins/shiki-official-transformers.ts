@@ -1,6 +1,6 @@
 // https://github.com/shikijs/shiki/tree/main/packages/transformers
 
-import type { Element, Text } from 'hast'
+import type { Element, ElementContent, Text } from 'hast'
 import type { ShikiTransformer, ShikiTransformerContext } from 'shiki'
 
 interface TransformerNotationMapOptions {
@@ -163,4 +163,30 @@ export function transformerNotationHighlight(
     },
     '@shikijs/transformers:notation-highlight'
   )
+}
+
+/**
+ * Remove notation escapes.
+ * Allows writing `// [!code ...]` in markdown as `// [\\!code ...]`.
+ */
+export function transformerRemoveNotationEscape(): ShikiTransformer {
+  return {
+    name: '@shikijs/transformers:remove-notation-escape',
+    code(hast) {
+      const replace = (node: ElementContent): void => {
+        if (node.type === 'text') {
+          node.value = node.value.replace('[\\!code', '[!code')
+          return
+        }
+        if ('children' in node) {
+          for (const child of node.children) {
+            replace(child)
+          }
+        }
+      }
+
+      replace(hast)
+      return hast
+    }
+  }
 }

@@ -5,6 +5,7 @@
     min-height: 70vh;
     padding: 6rem 2rem 4rem;
     text-align: center;
+    width: 100%;
 }
 
 .hero__content {
@@ -24,23 +25,25 @@
     will-change: transform, opacity;
 }
 
-.hero__title::after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: max-content;
-    content: 'Seeridia';
-    z-index: -1;
-    font-size: clamp(10rem, 30vw, 20rem);
-    -webkit-text-stroke: 2px #a9a9a941;
-    color: transparent;
-    transform: translate(-50%, -63%);
-    opacity: 0;
-    transition: opacity 400ms ease;
-}
+@media (min-width: 768px) {
+    .hero__title::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: max-content;
+        content: 'Seeridia';
+        z-index: -1;
+        font-size: clamp(10rem, 30vw, 20rem);
+        -webkit-text-stroke: 2px #a9a9a941;
+        color: transparent;
+        transform: translate(-50%, -63%);
+        opacity: 0;
+        transition: opacity 400ms ease;
+    }
 
-.hero__title:hover::after {
-    opacity: 1;
+    .hero__title:hover::after {
+        opacity: 1;
+    }
 }
 
 .hero__tagline {
@@ -63,11 +66,4 @@
     opacity: 0;
     transform: translateY(20px);
     will-change: transform, opacity;
-}
-
-@media (max-width: 640px) {
-    .hero {
-        min-height: 60vh;
-        padding: 5rem 1.5rem 3rem;
-    }
 }

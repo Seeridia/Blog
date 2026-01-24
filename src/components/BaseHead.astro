@@ -90,10 +90,11 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 <meta content={Astro.generator} name='generator' />
 
 {/* Styles */}
-<link rel='stylesheet' href='/styles/global.css' />
+<link rel='stylesheet' href='/src/assets/styles/global.css' />
 
 {/* Analytics */}
 <script
+  is:inline
   defer
   src='https://cloud.umami.is/script.js'
   data-website-id='b585901a-4e25-4ae3-bfa4-abf387dde0a2'></script>

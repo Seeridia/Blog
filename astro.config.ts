@@ -1,66 +1,51 @@
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import AstroPureIntegration from 'astro-pure'
-import { defineConfig } from 'astro/config'
+import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
-// Others
-// import { visualizer } from 'rollup-plugin-visualizer'
-
-// Local integrations
-// Local rehype & remark plugins
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
 // Shiki
 import {
   addCopyButton,
   addLanguage,
   addTitle,
-  transformerNotationDiff,
-  transformerNotationHighlight,
   updateStyle
 } from './src/plugins/shiki-transformers.ts'
+import {
+  transformerNotationDiff,
+  transformerNotationHighlight,
+  transformerRemoveNotationEscape
+} from './src/plugins/shiki-official-transformers.ts'
 import config from './src/site.config.ts'
 
 // https://astro.build/config
 export default defineConfig({
-  // Top-Level Options
+  // [Basic]
   site: 'https://blog.seeridia.top',
-  // base: '/docs',
+  // base: '/astro-pure/',
   trailingSlash: 'never',
+  prefetch: true,
+  server: { host: true },
 
-  // 输出模式：静态站点（会在 dist 下生成 HTML 及静态资源）
-  // https://docs.astro.build/zh-cn/guides/deploy/static/
+  // [Output]
   output: 'static',
-  // ---
 
+  // [Assets]
   image: {
+    responsiveStyles: true,
     service: {
       entrypoint: 'astro/assets/services/sharp'
     }
   },
 
+  // [Integrations]
   integrations: [
     // astro-pure will automatically add sitemap, mdx & unocss
     // sitemap(),
     // mdx(),
     AstroPureIntegration(config)
-    // (await import('@playform/compress')).default({
-    //   SVG: false,
-    //   Exclude: ['index.*.js']
-    // }),
-
-    // Temporary fix vercel adapter
-    // static build method is not needed
   ],
-  // root: './my-project-directory',
-
-  // Prefetch Options
-  prefetch: true,
-  // Server Options
-  server: {
-    host: true
-  },
-  // Markdown Options
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [
@@ -84,6 +69,7 @@ export default defineConfig({
       transformers: [
         transformerNotationDiff(),
         transformerNotationHighlight(),
+        transformerRemoveNotationEscape(),
         updateStyle(),
         addTitle(),
         addLanguage(),
@@ -91,15 +77,17 @@ export default defineConfig({
       ]
     }
   },
+  // [Experimental]
   experimental: {
-    contentIntellisense: true
-  },
-  vite: {
-    plugins: [
-      //   visualizer({
-      //     emitFile: true,
-      //     filename: 'stats.html'
-      //   })
+    contentIntellisense: true,
+    fonts: [
+      {
+        provider: fontProviders.fontshare(),
+        name: 'Satoshi',
+        cssVariable: '--font-satoshi',
+        weights: [400, 500],
+        subsets: ['latin']
+      }
     ]
   }
 })

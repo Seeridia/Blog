@@ -8,6 +8,8 @@ export const theme: ThemeUserConfig = {
   author: 'Seeridia',
   description: 'Seeridia 的小小小的大窝！',
   favicon: '/favicon/favicon.ico',
+  /** The default social card image for your site which should be a path to an image in the `public/` directory. */
+  socialCard: '/images/social-card.png',
   /** Specify the default language for this site. */
   locale: {
     lang: 'zh-CN',
@@ -22,7 +24,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: 'src/assets/avatar.png',
+    src: '/src/assets/avatar.png',
     alt: 'Avatar'
   },
 
@@ -101,7 +103,9 @@ export const integ: IntegrationUserConfig = {
       { name: 'Desc', val: theme.description || 'Null' },
       { name: 'Link', val: 'https://blog.seeridia.top' },
       { name: 'Avatar', val: 'https://www.github.com/Seeridia.png' }
-    ]
+    ],
+    // Cache avatars in `public/avatars/` to improve user experience.
+    cacheAvatar: true
   },
   // Enable page search function
   pagefind: true,
