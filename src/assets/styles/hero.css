@@ -12,6 +12,7 @@
     max-width: 680px;
 }
 
+/* 现在用签名动画代替，实际不显示该标题 */
 .hero__title {
     position: relative;
     font-size: clamp(3.5rem, 10vw, 6rem);
@@ -20,7 +21,6 @@
     line-height: 1;
     margin: 0;
     color: hsl(var(--foreground));
-    opacity: 0;
     transform: translateY(30px);
     will-change: transform, opacity;
 }
@@ -58,8 +58,8 @@
 }
 
 .hero__description {
-    margin-top: 3rem;
-    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+    margin-top: 5rem;
+    font-size: clamp(1rem, 2vw, 1.3rem);
     font-weight: 400;
     line-height: 1.6;
     color: hsl(var(--foreground) / 0.7);

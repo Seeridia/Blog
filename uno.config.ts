@@ -92,6 +92,9 @@ const typographyConfig = {
       'margin-top': '.5em',
       'margin-bottom': '.5em'
     },
+    p: {
+      'line-height': '1.8'
+    },
     // Inline code
     ...(typographyCustom.inlineCodeBlockStyle === 'modern' && {
       ':not(pre)>code::before,:not(pre)>code::after': {

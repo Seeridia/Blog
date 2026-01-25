@@ -1,5 +1,6 @@
 ---
 import config from '@/site-config'
+import HeroSignature from '@/components/home/HeroSignature.astro'
 
 import '@/assets/styles/hero.css'
 ---
@@ -7,7 +8,11 @@ import '@/assets/styles/hero.css'
 <section class='hero'>
   <div class='hero__content'>
     <p class='hero__tagline'>Developer & Designer</p>
-    <h1 class='hero__title'>{config.author}</h1>
+    <h1 class='hero__title sr-only'>{config.author}</h1>
+    <div class="hero__title">
+      <HeroSignature />
+    </div>
+    
     <p class='hero__description'>
       To wonder, and to feel.<br />
       去思索，也去感受
@@ -21,13 +26,13 @@ import '@/assets/styles/hero.css'
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   if (!prefersReducedMotion) {
-    gsap.to('.hero__title', {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: 'power3.out',
-      force3D: true
-    })
+    // gsap.to('.hero__title', {
+    //   opacity: 1,
+    //   y: 0,
+    //   duration: 1,
+    //   ease: 'power3.out',
+    //   force3D: true
+    // })
 
     gsap.to('.hero__tagline', {
       opacity: 1,
@@ -41,7 +46,7 @@ import '@/assets/styles/hero.css'
       opacity: 1,
       y: 0,
       duration: 0.8,
-      delay: 0.3,
+      delay: 4,
       ease: 'power3.out',
       force3D: true
     })
