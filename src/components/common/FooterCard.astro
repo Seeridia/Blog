@@ -11,11 +11,7 @@
 </section>
 
 <script>
-  import { gsap } from 'gsap'
-  import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import Splitting from 'splitting'
-
-  gsap.registerPlugin(ScrollTrigger)
 
   const container = document.getElementById('container')
   const text = document.getElementById('text')
@@ -24,21 +20,24 @@
     // 拆分文字
     Splitting({ target: text, by: 'chars' })
 
-    const chars = text.querySelectorAll('.char')
+    const chars = text.querySelectorAll<HTMLElement>('.char')
 
-    // GSAP 滚动动画
-    gsap.from(chars, {
-      scrollTrigger: {
-        trigger: container,
-        start: 'top 90%',
-        toggleActions: 'play none none none'
-      },
-      y: 20,
-      opacity: 0,
-      duration: 1.2,
-      stagger: 0.06,
-      ease: 'power3.out'
+    // IntersectionObserver + CSS 触发动画
+    chars.forEach((char, index) => {
+      char.style.transitionDelay = `${index * 0.03}s`
     })
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          container.classList.add('is-visible')
+          observer.disconnect()
+        }
+      },
+      { root: null, threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
+    )
+
+    observer.observe(container)
 
     // 缩放文本
     const resizeObserver = new ResizeObserver(() => {
@@ -54,5 +53,13 @@
 <style>
   .footer-card :global(.char) {
     display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform 0.8s ease, opacity 0.8s ease;
+  }
+
+  .footer-card #container.is-visible :global(.char) {
+    opacity: 1;
+    transform: translateY(0);
   }
 </style>

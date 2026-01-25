@@ -64,10 +64,11 @@
     opacity: 0;
     transform: translateY(20px);
     will-change: transform, opacity;
+    animation: hero-reveal 0.6s ease forwards;
 }
 
 .hero__description {
-    margin-top: 5rem;
+    margin-top: 6rem;
     font-size: clamp(1rem, 2vw, 1.3rem);
     font-weight: 400;
     line-height: 1.6;
@@ -75,10 +76,27 @@
     opacity: 0;
     transform: translateY(20px);
     will-change: transform, opacity;
+    animation: hero-reveal 0.6s ease 3.6s forwards;
 }
 
 .hero__signature {
     width: clamp(220px, 60vw, 407px);
     height: auto;
-    margin: 2.5rem auto 0;
+}
+
+@keyframes hero-reveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero__title,
+    .hero__tagline,
+    .hero__description {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
 }
