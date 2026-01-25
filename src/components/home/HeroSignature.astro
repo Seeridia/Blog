@@ -1,12 +1,22 @@
+---
+const {
+  width = 407,
+  height = 164,
+  class: className = '',
+  style
+} = Astro.props
+---
+
 <svg
-  class='hero-signature'
-  width='407'
-  height='164'
+  class={`hero-signature ${className}`.trim()}
+  width={width}
+  height={height}
   viewBox='0 0 407 164'
   fill='none'
   xmlns='http://www.w3.org/2000/svg'
   aria-hidden='true'
   focusable='false'
+  style={style}
 >
   <g id='Group 2'>
     <path
@@ -50,12 +60,15 @@
 
 <style>
   .hero-signature {
+    max-width: 100%;
+    height: auto;
     --dash-array-1: 885.93115234375;
     --dash-array-2: 23.54727554321289;
     --dash-array-3: 448.9736633300781;
     --dash-array-4: 19.03789710998535;
     --dash-array-5: 324.44232177734375;
     --dash-array-6: 259.0365295410156;
+    --signature-stroke: hsl(var(--foreground));
   }
 
   @media (prefers-reduced-motion) {
@@ -106,6 +119,7 @@
   }
 
   path {
+    stroke: var(--signature-stroke);
     stroke-dasharray: var(--dash-array);
     transform-origin: center;
     opacity: 0;

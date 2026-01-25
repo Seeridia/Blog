@@ -34,14 +34,23 @@
         content: 'Seeridia';
         z-index: -1;
         font-size: clamp(10rem, 30vw, 20rem);
-        -webkit-text-stroke: 2px #a9a9a941;
+        -webkit-text-stroke: 2px #a9a9a924;
         color: transparent;
         transform: translate(-50%, -63%);
         opacity: 0;
-        transition: opacity 400ms ease;
+        transition: -webkit-text-stroke 200ms ease;
+        /* 3.6s 是签名动画用时 */
+        animation: hero-title-shadow 400ms ease 3.6s forwards;
     }
 
-    .hero__title:hover::after {
+    /* 这边的 text-stroke 的透明度和下面的 opcacity，不矛盾，其实是这样的，我希望这个动画首先能让后面的字出现，然后如果 hover，还能调节透明度。如果都使用 opacity 会导致冲突 */
+    .hero__title:hover:after {
+        -webkit-text-stroke: 2px #a9a9a942;
+    }
+}
+
+@keyframes hero-title-shadow {
+    to {
         opacity: 1;
     }
 }
@@ -66,4 +75,10 @@
     opacity: 0;
     transform: translateY(20px);
     will-change: transform, opacity;
+}
+
+.hero__signature {
+    width: clamp(220px, 60vw, 407px);
+    height: auto;
+    margin: 2.5rem auto 0;
 }
