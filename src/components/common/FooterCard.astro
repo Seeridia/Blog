@@ -16,7 +16,9 @@
   const container = document.getElementById('container')
   const text = document.getElementById('text')
 
-  if (container && text) {
+  const run = () => {
+    if (!container || !text) return
+
     // 拆分文字
     Splitting({ target: text, by: 'chars' })
 
@@ -47,6 +49,12 @@
     })
 
     resizeObserver.observe(container)
+  }
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => run(), { timeout: 2000 })
+  } else {
+    setTimeout(() => run(), 300)
   }
 </script>
 
