@@ -260,6 +260,7 @@ const server = http.createServer((req, res) => {
         return
     }
 
+    // 去掉查询参数后再做 decode，防止路径中包含中文或空格时无法访问
     const decodedPath = decodeURIComponent(req.url.split('?')[0])
     const safePath = decodedPath.replace(/^\/+/, '')
     const filePath = path.resolve(distDir, safePath || 'index.html')
@@ -351,6 +352,8 @@ await new Promise((resolve) => server.close(resolve))
 ## Github Actions 集成
 
 到这边我个人的方案是：将上一步已经导出的 PDF 文件 push 到一个单独的仓库上，并且我选择放在 cnb 上面，这样国内用户可以直接通过 cnb 提供的文件下载链接来下载最新的 PDF 文件。
+
+这边我直接是将每次构建的新文件都放新的分支上，然后强制改名覆盖主分支，这样 cnb 上就只有一次 commit 的历史记录，节省空间和拉取速度。
 
 ```yaml
 name: Deploy to Production Server
@@ -486,9 +489,11 @@ jobs:
             echo "No PDF changes to push."
             exit 0
           fi
+          git checkout --orphan temp-sync
           git add -A
           git commit -m "Sync PDFs from ${{ github.sha }}"
-          git push
+          git branch -M main
+          git push --force origin main
 ```
 
 ## vitepress 配合
