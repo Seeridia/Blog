@@ -18,10 +18,10 @@
     "clean": "rm -rf .astro .vercel dist"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/rss": "^4.0.12",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/rss": "^4.0.15",
     "@waline/client": "^3.6.0",
-    "astro": "^5.12.0",
+    "astro": "^5.17.2",
     "astro-pure": "^1.4.0",
     "katex": "^0.16.22",
     "rehype-katex": "^7.0.1",

@@ -1,5 +1,5 @@
 ---
-import { Spoiler } from 'astro-pure/user'
+import { Collapse, Spoiler } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 import Sponsorship from '@/components/projects/Sponsorship.astro'
@@ -85,6 +85,23 @@ const headings = [
       }
     ]}
   />
+  <Collapse title='其他项目'>
+    <ProjectSection
+      projects={[
+        {
+          name: '化学笔记',
+          description: 'A chemistry note project based on Chinese high school textbooks',
+          links: [
+            { type: 'github', href: 'https://github.com/Seeridia/Chemistry-Note' },
+            {
+              type: 'doc',
+              href: 'https://chemistry-note.seeridia.top/'
+            }
+          ]
+        }
+      ]}
+    />
+  </Collapse>
 
   <h2 id='MyContributions' class='text-2xl'>My Contributions</h2>
   <ProjectSection

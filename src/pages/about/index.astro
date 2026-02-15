@@ -1,5 +1,5 @@
 ---
-import { Button, Timeline } from 'astro-pure/user'
+import { Button, Collapse, Timeline } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import Substats from '@/components/about/Substats.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
@@ -75,6 +75,23 @@ const headings = [
       }
     ]}
   />
+  <Collapse title='其他项目'>
+    <ProjectSection
+      projects={[
+        {
+          name: '化学笔记',
+          description: 'A chemistry note project based on Chinese high school textbooks',
+          links: [
+            { type: 'github', href: 'https://github.com/Seeridia/Chemistry-Note' },
+            {
+              type: 'doc',
+              href: 'https://chemistry-note.seeridia.top/'
+            }
+          ]
+        }
+      ]}
+    />
+  </Collapse>
 
   <h2 id='MyContributions' class='text-2xl'>My Contributions</h2>
   <ProjectSection
@@ -251,7 +268,7 @@ const headings = [
         color: '#0084ff',
         link: 'https://www.zhihu.com/people/seeridia',
         text: 'followers',
-        count: 1532
+        count: 1638
       },
       {
         platform: '邮箱',
