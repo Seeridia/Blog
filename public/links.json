@@ -51,6 +51,12 @@
                     "intro": "",
                     "link": "http://ludamn.xyz/",
                     "avatar": "https://www.github.com/dereck-wu.png"
+                },
+                {
+                    "name": "CarryRao个人主页",
+                    "intro": "前端小菜鸡一枚，后端“半吊子”一个，常用Vibe coding，个人理念“能跑就行”！",
+                    "link": "http://carryrao.top/",
+                    "avatar": "https://avatars.githubusercontent.com/u/148552102?v=4"
                 }
             ]
         }
