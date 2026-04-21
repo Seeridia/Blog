@@ -21,7 +21,7 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/rss": "^4.0.15",
     "@waline/client": "^3.6.0",
-    "astro": "^5.17.2",
+    "astro": "^6.1.8",
     "astro-pure": "^1.4.0",
     "katex": "^0.16.22",
     "rehype-katex": "^7.0.1",
