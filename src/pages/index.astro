@@ -20,12 +20,14 @@ const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
-  <main class='flex w-full flex-col items-center'>
-    <Hero />
+<PageLayout meta={{ title: 'Home' }}>
+  <main class='flex relative w-full flex-col items-center'>
+    <div class="hero-sticky-container">
+      <Hero class='sticky z-0' />
+    </div>
     <div
       id='content'
-      class='animate flex w-full max-w-5xl flex-col gap-y-14 px-6 md:gap-y-20 md:px-8'
+      class='animate relative z-1 flex w-full max-w-5xl flex-col gap-y-14 px-6 md:gap-y-20 md:px-8'
     >
       <Section title='About'>
         <p class='text-muted-foreground'>👋 Hi, 我是 Seeridia!</p>
@@ -147,7 +149,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           <img
             class='absolute end-0 z-0 m-0 -my-3 h-full w-1/2 object-cover opacity-40'
             src='/images/education/FZU.svg'
-            alt="福州大学"
+            alt='福州大学'
           />
         </Card>
       </Section>

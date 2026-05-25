@@ -3,9 +3,15 @@ import config from '@/site-config'
 import HeroSignature from '@/components/home/HeroSignature.astro'
 
 import '@/assets/styles/hero.css'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
 ---
 
-<section class='hero'>
+<section class:list={['hero', className]}>
   <div class='hero__content'>
     <p class='hero__tagline'>Developer & Designer</p>
     <h1 class='hero__title sr-only'>{config.author}</h1>

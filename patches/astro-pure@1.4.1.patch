@@ -1,0 +1,13 @@
+diff --git a/scripts/index.js b/scripts/index.js
+old mode 100644
+new mode 100755
+diff --git a/types/user-config.ts b/types/user-config.ts
+index 7265cfe214b30a567946a2454249b760cdfd3b8b..0c3c92990051fbc461ff3c8c1bb0e8f21602d167 100644
+--- a/types/user-config.ts
++++ b/types/user-config.ts
+@@ -1,4 +1,4 @@
+-import { z } from 'zod'
++import { z } from 'astro/zod'
+ 
+ import { IntegrationConfigSchema } from './integrations-config'
+ import { ThemeConfigSchema } from './theme-config'
