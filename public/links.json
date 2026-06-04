@@ -57,6 +57,12 @@
                     "intro": "前端小菜鸡一枚，后端“半吊子”一个，常用Vibe coding，个人理念“能跑就行”！",
                     "link": "http://carryrao.top/",
                     "avatar": "https://avatars.githubusercontent.com/u/148552102?v=4"
+                },
+                {
+                    "name": "wutong-yu-blog",
+                    "intro": "全栈&Agent 开发和我的随想",
+                    "link": "https://wutongyu.site",
+                    "avatar": "https://wutongyu.site/cat-icon.svg"
                 }
             ]
         }
