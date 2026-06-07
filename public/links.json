@@ -63,6 +63,12 @@
                     "intro": "全栈&Agent 开发和我的随想",
                     "link": "https://wutongyu.site",
                     "avatar": "https://wutongyu.site/cat-icon.svg"
+                },
+                {
+                    "name": "miuo’s blog",
+                    "intro": "记录文章、笔记、实验和暂时不想丢掉的内容",
+                    "link": "https://blog.miuo.me/",
+                    "avatar": "https://blog.miuo.me/avatar.avif"
                 }
             ]
         }
