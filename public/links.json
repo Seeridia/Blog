@@ -20,7 +20,7 @@
                     "name": "PurplePlanen",
                     "intro": "",
                     "link": "https://www.purpleplanen.top",
-                    "avatar": "https://www.github.com/PurplePlanen.png"
+                    "avatar": "https://www.purpleplanen.top/logo.png"
                 },
                 {
                     "name": "Binbim的个人主页",
@@ -69,6 +69,12 @@
                     "intro": "记录文章、笔记、实验和暂时不想丢掉的内容",
                     "link": "https://blog.miuo.me/",
                     "avatar": "https://blog.miuo.me/avatar.avif"
+                },
+                {
+                    "name": "Rye Land",
+                    "intro": "Fake it till you make it",
+                    "link": "https://rylan.cn",
+                    "avatar": "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F08a0bace-dc95-4c44-98ba-bf2645496c46%2F3c2b38f3-0fc8-4ecc-8403-6fc1f89d3637%2FBMOME_1.png?table=collection&id=d548e68f-715e-497a-bae7-21a79010ac32&t=d548e68f-715e-497a-bae7-21a79010ac32&width=800&cache=v2&width=800&cache=v2"
                 }
             ]
         }
