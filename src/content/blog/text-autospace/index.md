@@ -6,7 +6,7 @@ tags:
   - Website
   - CSS
   - TIL
-heroImage: { src: './cover.webp', color: '#3898C8' }
+heroImage: { src: './cover.webp', color: '#B3B086' }
 language: '中文'
 ---
 相关文档：

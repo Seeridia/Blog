@@ -6,7 +6,7 @@ tags:
   - Website
   - CI/CD
   - Github Actions
-heroImage: { src: './cover.webp', color: '#280808' }
+heroImage: { src: './cover.webp', color: '#B57957' }
 language: '中文'
 ---
 Surge.sh 是一个静态网站托管服务，开发者可以快速将静态网站部署上线，方便进行预览和分享。通过配置 Surge.sh 预览环境，可以在每次代码提交后自动生成预览链接，比如可以放在 Pull Request 中，极大地方便了团队协作和反馈。
