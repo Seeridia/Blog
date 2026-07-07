@@ -72,7 +72,10 @@ export const theme: ThemeUserConfig = {
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: false,
     /** Optional details about the social media accounts for this site. */
-    social: { github: 'https://github.com/seeridia', email: 'mailto:seeridia@gmail.com' }
+    social: [
+      { icon: 'github', label: 'GitHub', href: 'https://github.com/seeridia' },
+      { icon: 'email', label: 'Email', href: 'mailto:seeridia@gmail.com' }
+    ]
   },
 
   content: {

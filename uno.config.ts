@@ -120,7 +120,7 @@ const typographyConfig = {
       color: fg,
       'border-color': 'hsl(var(--border) / 1)',
       'box-shadow':
-        '0 0 0 1px hsl(var(--primary-foreground) / 1), 0 3px hsl(var(--primary-foreground) / 1)'
+        '0 0 0 1px hsl(var(--card) / 1), 0 3px hsl(var(--card) / 1)'
     },
     strong: {
       'font-weight': '600',
@@ -145,7 +145,7 @@ const themeColors = {
   foreground: 'hsl(var(--foreground) / <alpha-value>)',
   primary: {
     DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
-    foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
+    foreground: 'hsl(var(--card) / <alpha-value>)'
   },
   secondary: {
     DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',

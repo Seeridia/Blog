@@ -1,18 +1,22 @@
 ---
 import config from 'virtual:config'
 
+import type { IconsType } from 'astro-pure/types'
 import { Icon } from 'astro-pure/user'
 
 import FooterCard from './FooterCard.astro'
 
 const footerConf = config.footer
-let social = footerConf.social || {}
+const social = [...(footerConf.social || [])]
+const hasRss = social.some(({ icon }) => icon === 'rss')
 
-// If the list does not contain rss, add it
-social.rss = {
-  label: 'RSS',
-  url: '/rss.xml'
-}
+// If the list does not contain RSS, add it
+if (!hasRss)
+  social.push({
+    icon: 'rss',
+    label: 'RSS',
+    href: '/rss.xml'
+  })
 
 const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
 ---
@@ -46,14 +50,14 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
       {/* Social Brands */}
       <div class='flex items-center gap-x-4'>
         {
-          footerConf.social &&
-            Object.entries(footerConf.social).map(([platform, { label, url }]) => (
+          social.length > 0 &&
+            social.map(({ icon, label, href }) => (
               <a
                 class='inline-block text-muted-foreground transition-all hover:text-muted-foreground/75'
-                href={url}
+                href={href}
                 aria-label={label}
               >
-                <Icon name={platform as keyof typeof footerConf.social} />
+                <Icon name={icon as IconsType} />
               </a>
             ))
         }

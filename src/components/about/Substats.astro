@@ -1,11 +1,11 @@
 ---
-import { type iconsType } from 'astro-pure/types'
+import { type IconsType } from 'astro-pure/types'
 import { Icon } from 'astro-pure/user'
 
 interface SubstatsItem {
   platform: string
-  // allow either a known iconsType or a custom string (e.g. 'qq')
-  icon: iconsType | string
+  // allow either a known IconsType or a custom string (e.g. 'qq')
+  icon: IconsType | string
   color?: string
   link?: string
   text?: string
@@ -52,7 +52,7 @@ await Promise.all(stats.map(fetchCount))
             typeof icon === 'string' && icon.trim().startsWith('<svg') ? (
               <span set:html={icon} />
             ) : (
-              <Icon name={icon as unknown as iconsType} color={color} />
+              <Icon name={icon as unknown as IconsType} color={color} />
             )
           ) : null}
           <div class='flex-1 text-foreground transition-colors group-hover:text-primary'>

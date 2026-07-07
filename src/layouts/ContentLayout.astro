@@ -16,7 +16,7 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
-  <Button title='Back' href={back} style='back' />
+  <Button title='Back' href={back} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
     <aside
@@ -93,7 +93,6 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
     } else if (sidebar) {
       sidebar.classList.add('show')
       sidebarShade.style.display = 'block'
-    } else {
     }
   }
 

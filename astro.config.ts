@@ -11,12 +11,12 @@ import {
   addLanguage,
   addTitle,
   updateStyle
-} from './src/plugins/shiki-transformers.ts'
+} from './src/plugins/shiki/transformers.ts'
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
   transformerRemoveNotationEscape
-} from './src/plugins/shiki-official-transformers.ts'
+} from './src/plugins/shiki/official-transformers.ts'
 import config from './src/site.config.ts'
 
 // https://astro.build/config
@@ -78,16 +78,16 @@ export default defineConfig({
     }
   },
   // [Experimental]
+  fonts: [
+    {
+      provider: fontProviders.fontshare(),
+      name: 'Satoshi',
+      cssVariable: '--font-satoshi',
+      weights: [400, 500],
+      subsets: ['latin']
+    }
+  ],
   experimental: {
-    contentIntellisense: true,
-    fonts: [
-      {
-        provider: fontProviders.fontshare(),
-        name: 'Satoshi',
-        cssVariable: '--font-satoshi',
-        weights: [400, 500],
-        subsets: ['latin']
-      }
-    ]
+    contentIntellisense: true
   }
 })
