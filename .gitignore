@@ -70,6 +70,7 @@ node_modules/
 # environment variables
 .env
 .env.production
+.elog.env
 
 # others
 .DS_Store

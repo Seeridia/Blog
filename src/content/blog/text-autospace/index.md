@@ -6,10 +6,9 @@ tags:
   - Website
   - CSS
   - TIL
-heroImage: { src: './cover.webp', color: '#486640' }
+heroImage: { src: './cover.webp', color: '#3898C8' }
 language: '中文'
 ---
-
 相关文档：
 
 [text-autospace - CSS：层叠样式表 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Properties/text-autospace)

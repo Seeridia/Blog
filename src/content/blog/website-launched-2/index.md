@@ -4,10 +4,9 @@ publishDate: 2025-08-22 22:00:00
 description: '域名 与 DNS'
 tags:
   - Website
-heroImage: { src: './cover.webp', color: '#A8225A' }
+heroImage: { src: './cover.webp', color: '#A82858' }
 language: '中文'
 ---
-
 我就从 域名 → DNS → CDN → ESA 这条链路开始看看一个网站的上线，特别是在国内的网络环境下，如何保证用户能够快速、稳定地访问。不过本篇只会有域名和DNS，后续会补上CDN（这部分太多了）。
 
 本文的部分内容和供图来自阿里云的 [帮助文档](https://help.aliyun.com/zh/dns/basic-concepts-dns2-0)

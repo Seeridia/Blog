@@ -15,7 +15,8 @@
     "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro}'",
     "lint": "eslint --fix 'src/**/*.{js,ts,jsx,tsx,astro}'",
     "yijiansilian": "bun lint && bun sync && bun check && bun format",
-    "clean": "rm -rf .astro .vercel dist"
+    "clean": "rm -rf .astro .vercel dist",
+    "elog:sync": "elog sync -c .elog/elog.config.js -e .elog.env && node scripts/elog-postprocess.cjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -26,7 +27,7 @@
     "katex": "^0.16.47",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.3",
     "splitting": "^1.1.0",
     "typescript": "^5.9.3"
   },
@@ -36,6 +37,7 @@
     "@types/splitting": "^1.0.6",
     "eslint": "^9.39.4",
     "eslint-plugin-astro": "^1.7.0",
+    "gray-matter": "^4.0.3",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "rollup-plugin-visualizer": "^6.0.11",
