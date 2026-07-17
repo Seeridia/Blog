@@ -71,6 +71,7 @@ node_modules/
 .env
 .env.production
 .elog.env
+elog.cache.json
 
 # others
 .DS_Store
