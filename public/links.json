@@ -1,82 +1,88 @@
 {
-    "friends": [
+  "friends": [
+    {
+      "id_name": "Links",
+      "desc": "Friend link",
+      "link_list": [
         {
-            "id_name": "Links",
-            "desc": "Friend link",
-            "link_list": [
-                {
-                    "name": "小海的角落",
-                    "intro": "一个小角落",
-                    "link": "https://norubias.site",
-                    "avatar": "https://www.github.com/ourcx.png"
-                },
-                {
-                    "name": "Seeridia 小小的大窝",
-                    "intro": "其实是本人啦",
-                    "link": "https://www.seeridia.top",
-                    "avatar": "https://www.github.com/seeridia.png"
-                },
-                {
-                    "name": "PurplePlanen",
-                    "intro": "",
-                    "link": "https://www.purpleplanen.top",
-                    "avatar": "https://www.purpleplanen.top/logo.png"
-                },
-                {
-                    "name": "Binbim的个人主页",
-                    "intro": "一个职高三年级全栈er",
-                    "link": "https://hi.binbim.top",
-                    "avatar": "https://q1.qlogo.cn/g?b=qq&nk=1721822150&s=640"
-                },
-                {
-                    "name": "洛不出来的知乎主页",
-                    "intro": "洛不出来",
-                    "link": "https://www.zhihu.com/people/ha-ha-ha-51-72-60",
-                    "avatar": "https://pica.zhimg.com/v2-fb0162a052b711e3aaf6bdaa395d35cd_l.jpg?source=32738c0c"
-                },
-                {
-                    "name": "huizhi's Aside",
-                    "intro": "只是一些碎碎念吧",
-                    "link": "https://blog.huizhi.ink",
-                    "avatar": "https://cdn.jsdelivr.net/gh/huizhiLLL/Photo-bed@main/img/avatar1.png"
-                },
-                {
-                    "name": "Krison's Blog",
-                    "intro": "天地有大美而不言",
-                    "link": "http://krisonzhang.cn",
-                    "avatar": "https://www.github.com/zmlxzyh.png"
-                },
-                {
-                    "name": "LUDAMN | Blog",
-                    "intro": "",
-                    "link": "http://ludamn.xyz/",
-                    "avatar": "https://www.github.com/dereck-wu.png"
-                },
-                {
-                    "name": "CarryRao个人主页",
-                    "intro": "前端小菜鸡一枚，后端“半吊子”一个，常用Vibe coding，个人理念“能跑就行”！",
-                    "link": "http://carryrao.top/",
-                    "avatar": "https://avatars.githubusercontent.com/u/148552102?v=4"
-                },
-                {
-                    "name": "wutong-yu-blog",
-                    "intro": "全栈&Agent 开发和我的随想",
-                    "link": "https://wutongyu.site",
-                    "avatar": "https://wutongyu.site/cat-icon.svg"
-                },
-                {
-                    "name": "miuo’s blog",
-                    "intro": "记录文章、笔记、实验和暂时不想丢掉的内容",
-                    "link": "https://miuo.me/",
-                    "avatar": "https://miuo.me/avatar.avif"
-                },
-                {
-                    "name": "Rye Land",
-                    "intro": "Fake it till you make it",
-                    "link": "https://rylan.cn",
-                    "avatar": "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F08a0bace-dc95-4c44-98ba-bf2645496c46%2F3c2b38f3-0fc8-4ecc-8403-6fc1f89d3637%2FBMOME_1.png?table=collection&id=d548e68f-715e-497a-bae7-21a79010ac32&t=d548e68f-715e-497a-bae7-21a79010ac32&width=800&cache=v2&width=800&cache=v2"
-                }
-            ]
+          "name": "小海的角落",
+          "intro": "一个小角落",
+          "link": "https://norubias.site",
+          "avatar": "https://www.github.com/ourcx.png"
+        },
+        {
+          "name": "Seeridia 小小的大窝",
+          "intro": "其实是本人啦",
+          "link": "https://www.seeridia.top",
+          "avatar": "https://www.github.com/seeridia.png"
+        },
+        {
+          "name": "PurplePlanen",
+          "intro": "",
+          "link": "https://www.purpleplanen.top",
+          "avatar": "https://www.purpleplanen.top/logo.png"
+        },
+        {
+          "name": "Binbim的个人主页",
+          "intro": "一个职高三年级全栈er",
+          "link": "https://hi.binbim.top",
+          "avatar": "https://q1.qlogo.cn/g?b=qq&nk=1721822150&s=640"
+        },
+        {
+          "name": "洛不出来",
+          "intro": "洛不出来",
+          "link": "https://www.zhihu.com/people/ha-ha-ha-51-72-60",
+          "avatar": "https://pica.zhimg.com/v2-fb0162a052b711e3aaf6bdaa395d35cd_l.jpg?source=32738c0c"
+        },
+        {
+          "name": "huizhi's Aside",
+          "intro": "只是一些碎碎念吧",
+          "link": "https://blog.huizhi.ink",
+          "avatar": "https://cdn.jsdelivr.net/gh/huizhiLLL/Photo-bed@main/img/avatar1.png"
+        },
+        {
+          "name": "Krison's Blog",
+          "intro": "天地有大美而不言",
+          "link": "http://krisonzhang.cn",
+          "avatar": "https://www.github.com/zmlxzyh.png"
+        },
+        {
+          "name": "LUDAMN | Blog",
+          "intro": "",
+          "link": "http://ludamn.xyz/",
+          "avatar": "https://www.github.com/dereck-wu.png"
+        },
+        {
+          "name": "CarryRao",
+          "intro": "前端小菜鸡一枚，后端“半吊子”一个，常用Vibe coding，个人理念“能跑就行”！",
+          "link": "http://carryrao.top/",
+          "avatar": "https://avatars.githubusercontent.com/u/148552102?v=4"
+        },
+        {
+          "name": "wutong-yu-blog",
+          "intro": "全栈&Agent 开发和我的随想",
+          "link": "https://wutongyu.site",
+          "avatar": "https://wutongyu.site/cat-icon.svg"
+        },
+        {
+          "name": "miuo’s blog",
+          "intro": "记录文章、笔记、实验和暂时不想丢掉的内容",
+          "link": "https://miuo.me/",
+          "avatar": "https://miuo.me/avatar.avif"
+        },
+        {
+          "name": "Rye Land",
+          "intro": "Fake it till you make it",
+          "link": "https://rylan.cn",
+          "avatar": "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F08a0bace-dc95-4c44-98ba-bf2645496c46%2F3c2b38f3-0fc8-4ecc-8403-6fc1f89d3637%2FBMOME_1.png?table=collection&id=d548e68f-715e-497a-bae7-21a79010ac32&t=d548e68f-715e-497a-bae7-21a79010ac32&width=800&cache=v2&width=800&cache=v2"
+        },
+        {
+          "name": "xf_blog",
+          "intro": "立志用 cloudflare workers，GitHub pages 和 vercel 做出整个互联网的 up（虽然不会成功",
+          "link": "https://xfcnl.github.io",
+          "avatar": "https://avatars.githubusercontent.com/u/201362257?v=4"
         }
-    ]
+      ]
+    }
+  ]
 }
