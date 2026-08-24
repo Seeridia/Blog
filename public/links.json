@@ -81,6 +81,12 @@
           "intro": "立志用 cloudflare workers，GitHub pages 和 vercel 做出整个互联网的 up（虽然不会成功",
           "link": "https://xfcnl.github.io",
           "avatar": "https://avatars.githubusercontent.com/u/201362257?v=4"
+        },
+        {
+          "name": "Geuo",
+          "intro": "记录创造，探索未知",
+          "link": "https://geuo.org",
+          "avatar": "https://geuo.org/image/avatar.png"
         }
       ]
     }
