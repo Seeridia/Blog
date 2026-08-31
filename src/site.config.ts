@@ -1,4 +1,4 @@
-import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types';
+import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
@@ -24,7 +24,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: '/src/assets/avatar.png',
+    src: '/src/assets/avatar.webp',
     alt: 'Avatar'
   },
 
@@ -62,11 +62,11 @@ export const theme: ThemeUserConfig = {
     links: [
       {
         title: '闽ICP备2025099091号',
-        link: 'https://beian.miit.gov.cn',
+        link: 'https://beian.miit.gov.cn'
       },
       {
         title: '闽公网安备35018302000247号',
-        link: 'https://beian.mps.gov.cn/#/query/webSearch?code=35018302000247',
+        link: 'https://beian.mps.gov.cn/#/query/webSearch?code=35018302000247'
       }
     ],
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
@@ -99,8 +99,7 @@ export const integ: IntegrationUserConfig = {
   // See: https://astro-pure.js.org/docs/integrations/links
   links: {
     // Friend logbook
-    logbook: [
-    ],
+    logbook: [],
     applyTip: [
       { name: 'Name', val: theme.title },
       { name: 'Desc', val: theme.description || 'Null' },
@@ -154,7 +153,7 @@ export const integ: IntegrationUserConfig = {
       comment: true,
       locale: {
         reaction0: 'Like',
-        placeholder: '其实在这边的评论我也不知道自己会不会看到……',
+        placeholder: '其实在这边的评论我也不知道自己会不会看到……'
       },
       imageUploader: true
     }

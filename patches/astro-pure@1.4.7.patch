@@ -1,0 +1,54 @@
+diff --git a/components/pages/PostPreview.astro b/components/pages/PostPreview.astro
+index 777883fbc004e5832be3c19e99d09d7c6d656941..bab25c4d590aafa33fe3c651e4add6b23db6989d 100644
+--- a/components/pages/PostPreview.astro
++++ b/components/pages/PostPreview.astro
+@@ -51,7 +51,7 @@ const postDate = data.updatedDate ?? data.publishDate
+ 
+       {/* title */}
+       <div class='flex justify-between flex-grow'>
+-        <div class={detailed && 'font-medium'}>
++        <div class={detailed ? 'font-medium' : ''}>
+           {data.draft && <span class='text-red-500'>(Draft) </span>}
+           {data.title}
+         </div>
+diff --git a/index.ts b/index.ts
+index a11556b9016ea8221407c2cd0318dfb2f601914d..5b92579a84f09044c9cc387dc05cbf93b4d6202b 100644
+--- a/index.ts
++++ b/index.ts
+@@ -5,6 +5,11 @@ import { fileURLToPath } from 'node:url'
+ import type { AstroIntegration, RehypePlugins, RemarkPlugins } from 'astro'
+ // Integrations
+ import mdx from '@astrojs/mdx'
++import {
++  isUnifiedProcessor,
++  type UnifiedResolvedOptions,
++  unified
++} from '@astrojs/markdown-remark'
+ import sitemap from '@astrojs/sitemap'
+ import UnoCSS from '@unocss/astro'
+ import { AstroError } from 'astro/errors'
+@@ -75,6 +80,10 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
+         const selfIndex = config.integrations.findIndex((i) => i.name === 'astro-pure')
+         config.integrations.splice(selfIndex + 1, 0, ...integrations)
+ 
++        const currentProcessor = config.markdown.processor
++        const processorOptions: Partial<UnifiedResolvedOptions> =
++          currentProcessor && isUnifiedProcessor(currentProcessor) ? currentProcessor.options : {}
++
+         updateConfig({
+           vite: {
+             // biome-ignore lint/suspicious/noTsIgnore: expects error for local, but expects no error when build
+@@ -82,8 +91,11 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
+             plugins: [vitePluginUserConfig(userConfig, config)]
+           },
+           markdown: {
+-            remarkPlugins,
+-            rehypePlugins
++            processor: unified({
++              ...processorOptions,
++              remarkPlugins: [...(processorOptions.remarkPlugins ?? []), ...remarkPlugins],
++              rehypePlugins: [...(processorOptions.rehypePlugins ?? []), ...rehypePlugins]
++            })
+             // rehypePlugins: [rehypeRtlCodeSupport()],
+             // shikiConfig:
+             // Configure Shiki theme if the user is using the default github-dark theme.

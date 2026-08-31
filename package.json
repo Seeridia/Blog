@@ -19,29 +19,39 @@
     "elog:sync": "elog sync -c .elog/elog.config.js -e .elog.env && node scripts/elog-postprocess.cjs"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "^0.9.10",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@astrojs/rss": "^4.0.19",
     "@waline/client": "^3.15.2",
-    "astro": "6.1.8",
-    "astro-pure": "1.4.6",
-    "colorthief": "^3.4.0",
-    "katex": "^0.16.47",
+    "astro": "7.2.9",
+    "astro-pure": "1.4.7",
+    "colorthief": "^3.5.0",
+    "katex": "^0.18.4",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.4",
     "splitting": "^1.1.0",
-    "typescript": "^6.0.3"
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
+    "@eslint/js": "^10.0.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@types/splitting": "^1.0.6",
-    "eslint": "^9.39.4",
-    "eslint-plugin-astro": "^1.7.0",
+    "eslint": "^10.9.1",
+    "eslint-plugin-astro": "^3.1.0",
     "gray-matter": "^4.0.3",
-    "prettier": "^3.9.4",
+    "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
-    "rollup-plugin-visualizer": "^6.0.11",
-    "typescript-eslint": "^8.63.0"
+    "rollup-plugin-visualizer": "^7.1.1",
+    "typescript-eslint": "^8.68.0"
+  },
+  "overrides": {
+    "@astrojs/mdx": "7.0.8",
+    "@astrojs/sitemap": "3.7.3",
+    "astro": "7.2.9",
+    "yaml": "2.9.0"
+  },
+  "patchedDependencies": {
+    "astro-pure@1.4.7": "patches/astro-pure@1.4.7.patch"
   }
 }

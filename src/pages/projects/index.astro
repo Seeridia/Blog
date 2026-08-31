@@ -1,8 +1,8 @@
 ---
-import { Collapse, Spoiler } from 'astro-pure/user'
-import PageLayout from '@/layouts/CommonPage.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 import Sponsorship from '@/components/projects/Sponsorship.astro'
+import PageLayout from '@/layouts/CommonPage.astro'
+import { Collapse, Spoiler } from 'astro-pure/user'
 
 const headings = [
   { depth: 2, slug: 'MyWorks', text: 'My Works' },
@@ -35,8 +35,7 @@ const headings = [
         name: 'Shotmeld',
         description: '高颜值的在线照片存储与管理平台',
         links: [
-          { type: 'github', href: 'https://github.com/ShotMeld/Shotmeld-web' },
-          { type: 'site', href: 'https://shotmeld.seeridia.top' }
+          { type: 'github', href: 'https://github.com/ShotMeld/Shotmeld-web' }
           // {
           //   type: 'doc',
           //   href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/blog/customize/index.md'
