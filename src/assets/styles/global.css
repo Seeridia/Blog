@@ -205,6 +205,12 @@ span.katex-display {
   }
 }
 
+/* Plain-text blocks do not receive token colors from Shiki. Keep those
+   unstyled spans readable in both themes instead of inheriting --shiki-dark. */
+.astro-code pre code .line > span:not([style]) {
+  color: hsl(var(--foreground) / var(--un-text-opacity, 1)) !important;
+}
+
 /* Scroll bar */
 :root {
   --scrollbar-width: 6px;

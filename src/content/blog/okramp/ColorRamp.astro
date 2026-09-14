@@ -1,0 +1,137 @@
+---
+interface Props {
+  title: string
+  seed?: string
+  colors: string[]
+}
+
+const { title, seed, colors } = Astro.props
+
+function channelLuminance(hex: string, offset: number) {
+  const channel = Number.parseInt(hex.slice(offset, offset + 2), 16) / 255
+  return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+}
+
+function foreground(hex: string) {
+  const luminance =
+    channelLuminance(hex, 1) * 0.2126 +
+    channelLuminance(hex, 3) * 0.7152 +
+    channelLuminance(hex, 5) * 0.0722
+
+  return luminance > 0.36 ? '#101828' : '#fff'
+}
+---
+
+<figure class='color-ramp not-prose my-6'>
+  <figcaption class='mb-2 flex items-center justify-between gap-3'>
+    <strong class='text-sm text-foreground'>{title}</strong>
+    {
+      seed && (
+        <span class='seed-preview' title={'输入主色：' + seed}>
+          <i class='seed-swatch' style={'background:' + seed} aria-hidden='true' />
+          <span class='seed-copy'>
+            <span>Seed</span>
+            <code>{seed}</code>
+          </span>
+        </span>
+      )
+    }
+  </figcaption>
+  <div
+    class='ramp-grid overflow-hidden rounded-xl border'
+    style={'--ramp-count:' + colors.length}
+    aria-label={title + '，由浅到深共 ' + colors.length + ' 阶'}
+  >
+    {
+      colors.map((color, index) => (
+        <div
+          class='ramp-stop flex min-w-0 flex-col items-center justify-between px-1 py-2'
+          style={'background:' + color + ';color:' + foreground(color)}
+          title={'第 ' + (index + 1) + ' 阶：' + color}
+        >
+          <span class='text-xs font-medium'>{index + 1}</span>
+          <code class='ramp-value text-[10px]'>{color}</code>
+        </div>
+      ))
+    }
+  </div>
+</figure>
+
+<style>
+  .seed-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: none;
+  }
+
+  .seed-swatch {
+    display: block;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+    border-radius: 0.55rem;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 18%);
+  }
+
+  .seed-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.25;
+  }
+
+  .seed-copy > span {
+    color: color-mix(in srgb, currentColor 55%, transparent);
+    font-size: 0.6rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .seed-copy code {
+    padding: 0;
+    color: color-mix(in srgb, currentColor 72%, transparent);
+    background: transparent;
+    font-size: 0.68rem;
+  }
+
+  .ramp-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--ramp-count), minmax(0, 1fr));
+  }
+
+  .ramp-stop {
+    min-height: 6rem;
+  }
+
+  .ramp-value {
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    writing-mode: vertical-rl;
+    opacity: 0.78;
+  }
+
+  @media (min-width: 640px) {
+    .ramp-stop {
+      min-height: 7.5rem;
+    }
+
+    .ramp-value {
+      writing-mode: horizontal-tb;
+      font-size: 0.625rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .seed-swatch {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    .seed-copy > span {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,85 @@
+<figure class='midpoint-strip not-prose my-7' aria-label='纯白、线性光中点、sRGB 数值中点与纯黑'>
+  <div class='midpoint-swatch white' style='background:#fff'>
+    <strong>#FFFFFF</strong>
+    <span>纯白</span>
+    <b>相对亮度 100%</b>
+  </div>
+  <div class='midpoint-swatch dark' style='background:#808080'>
+    <strong>#808080</strong>
+    <span>sRGB 数值中点</span>
+    <b>相对亮度 21.6%</b>
+  </div>
+  <div class='midpoint-swatch black' style='background:#000'>
+    <strong>#000000</strong>
+    <span>纯黑</span>
+    <b>相对亮度 0%</b>
+  </div>
+</figure>
+
+<figure class='midpoint-strip not-prose my-7' aria-label='纯白、线性光中点、sRGB 数值中点与纯黑'>
+  <div class='midpoint-swatch white' style='background:#fff'>
+    <strong>#FFFFFF</strong>
+    <span>纯白</span>
+    <b>相对亮度 100%</b>
+  </div>
+  <div class='midpoint-swatch light' style='background:#bcbcbc'>
+    <strong>#BCBCBC</strong>
+    <span>线性光中点</span>
+    <b>相对亮度 50.3%</b>
+  </div>
+  <div class='midpoint-swatch black' style='background:#000'>
+    <strong>#000000</strong>
+    <span>纯黑</span>
+    <b>相对亮度 0%</b>
+  </div>
+</figure>
+
+<style>
+  .midpoint-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-height: 9rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    border-radius: 0.75rem;
+  }
+
+  .midpoint-swatch {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0.75rem;
+  }
+
+  .midpoint-swatch.white,
+  .midpoint-swatch.light {
+    color: #151515;
+  }
+
+  .midpoint-swatch.dark,
+  .midpoint-swatch.black {
+    color: #fff;
+  }
+
+  .midpoint-swatch strong {
+    overflow-wrap: anywhere;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.76rem;
+  }
+
+  .midpoint-swatch span,
+  .midpoint-swatch b {
+    font-size: 0.64rem;
+    font-weight: 500;
+    line-height: 1.45;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 640px) {
+    .midpoint-swatch {
+      min-height: 7rem;
+      padding: 0.6rem;
+    }
+  }
+</style>

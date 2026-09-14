@@ -97,7 +97,10 @@ const typographyConfig = {
     },
     // Inline code
     ...(typographyCustom.inlineCodeBlockStyle === 'modern' && {
-      ':not(pre)>code::before,:not(pre)>code::after': {
+      ':not(pre)>code::before': {
+        content: 'none'
+      },
+      ':not(pre)>code::after': {
         content: 'none'
       },
       ':not(pre) > code': {
