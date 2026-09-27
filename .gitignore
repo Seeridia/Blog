@@ -84,6 +84,5 @@ bunfig.toml
 # Cached external metadata (reused in CI)
 .cache/
 
-# Python deployment checks
-__pycache__/
-*.pyc
+# Local deployment notes
+/docs/deployment.md

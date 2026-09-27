@@ -29,11 +29,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push'
         with:
-          name: site-release
+          name: site-build
           retention-days: 5
-          path: |
-            dist/
-            scripts/activate-release.py
+          path: dist/
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -42,28 +40,17 @@ jobs:
     concurrency:
       group: production-deploy
       cancel-in-progress: false
-    env:
-      DEPLOY_TARGET: ${{ secrets.TARGET_DIR }}
-      RELEASE_ID: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: site-release
-      - name: Upload staged release
+          name: site-build
+          path: dist
+      - name: Upload site
         uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: 'dist/*,scripts/activate-release.py'
-          target: ${{ env.DEPLOY_TARGET }}.deploy/${{ env.RELEASE_ID }}
-      - name: Verify and activate release
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: DEPLOY_TARGET,RELEASE_ID
-          script: |
-            set -eu
-            python3 "${DEPLOY_TARGET}.deploy/${RELEASE_ID}/scripts/activate-release.py" "$DEPLOY_TARGET" "$RELEASE_ID"
+          source: 'dist/*'
+          target: ${{ secrets.TARGET_DIR }}
+          strip_components: 1

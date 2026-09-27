@@ -21,9 +21,8 @@
     "format:check": "node scripts/check-format.mjs",
     "format:code": "node scripts/check-format.mjs --write",
     "test": "bun test tests",
-    "test:deploy": "python3 -m unittest discover -s tests -p \"*_test.py\"",
     "verify:build": "node scripts/verify-build.mjs",
-    "verify": "bun run lint:check && bun run format:check && bun run test && bun run test:deploy && bun run build && bun run verify:build"
+    "verify": "bun run lint:check && bun run format:check && bun run test && bun run build && bun run verify:build"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",

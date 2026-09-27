@@ -12,7 +12,7 @@ bun run dev
 bun run verify
 ```
 
-`verify` 包括 ESLint、已跟踪代码的格式检查、RSS 测试、部署脚本测试、Astro 类型检查、构建及产物校验。`bun run format:code` 只格式化受维护的代码，不改写文章。新增代码需要先加入 Git 暂存区才能进入格式检查范围。
+`verify` 包括 ESLint、已跟踪代码的格式检查、RSS 测试、Astro 类型检查、构建及产物校验。`bun run format:code` 只格式化受维护的代码，不改写文章。新增代码需要先加入 Git 暂存区才能进入格式检查范围。
 
 ## 项目边界
 
@@ -25,5 +25,3 @@ bun run verify
 ## 验收
 
 运行 `bun run build && bun run preview`，检查首页签名及入口、文章目录、搜索、RSS，以及含 Mermaid 的文章。在窄屏下检查菜单和目录；切换浅色、深色、系统主题和系统“减少动态效果”。评论滚动到可视区域后加载，远程服务不可用时应保留正文和回退提示。
-
-工作流与首次服务器迁移见 [部署文档](docs/deployment.md)。

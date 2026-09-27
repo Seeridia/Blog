@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict'
-import { createHash } from 'node:crypto'
-import { readdir, readFile, stat, writeFile } from 'node:fs/promises'
+import { readdir, readFile, stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parse } from 'node-html-parser'
 
@@ -52,15 +51,6 @@ for (const item of items) {
   for (const img of body.querySelectorAll('img'))
     assert.match(img.getAttribute('src') ?? '', /^https?:\/\//)
 }
-const manifest = {}
-for (const file of files.sort()) {
-  const name = file.slice(root.length + 1)
-  if (name === 'build-manifest.json') continue
-  manifest[name] = createHash('sha256')
-    .update(await readFile(file))
-    .digest('hex')
-}
-await writeFile(join(root, 'build-manifest.json'), JSON.stringify({ files: manifest }, null, 2))
 console.log(
-  `Verified ${htmlFiles.length} pages, ${indexed} search pages, ${items.length} RSS entries; release hashes written.`
+  `Verified ${htmlFiles.length} pages, ${indexed} search pages, ${items.length} RSS entries.`
 )
