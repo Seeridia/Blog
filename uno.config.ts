@@ -12,7 +12,7 @@ const typographyConfig = {
   cssExtend: {
     // Title
     'h2,h3,h4,h5,h6': {
-      'scroll-margin-top': '3rem',
+      'scroll-margin-top': '7rem',
       'font-weight': '500',
       color: fg
     },
@@ -122,8 +122,7 @@ const typographyConfig = {
     kbd: {
       color: fg,
       'border-color': 'hsl(var(--border) / 1)',
-      'box-shadow':
-        '0 0 0 1px hsl(var(--card) / 1), 0 3px hsl(var(--card) / 1)'
+      'box-shadow': '0 0 0 1px hsl(var(--card) / 1), 0 3px hsl(var(--card) / 1)'
     },
     strong: {
       'font-weight': '600',

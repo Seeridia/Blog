@@ -1,10 +1,7 @@
 import { h } from 'hastscript'
 import type { ShikiTransformer } from 'shiki'
 
-export {
-  transformerNotationDiff,
-  transformerNotationHighlight
-} from './official-transformers'
+export { transformerNotationDiff, transformerNotationHighlight } from './official-transformers'
 
 function parseMetaString(str = '') {
   return Object.fromEntries(
@@ -101,10 +98,14 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
         {
           class: 'copy text-muted-foreground p-1 box-content border rounded bg-card',
           'data-code': this.source,
+          type: 'button',
+          'aria-label': '复制代码',
           onclick: `
-          navigator.clipboard.writeText(this.dataset.code);
-          this.classList.add('copied');
-          setTimeout(() => this.classList.remove('copied'), ${toggleMs})
+          navigator.clipboard.writeText(this.dataset.code).then(() => {
+            this.classList.add('copied');
+            this.setAttribute('aria-label', '已复制');
+            setTimeout(() => { this.classList.remove('copied'); this.setAttribute('aria-label', '复制代码'); }, ${toggleMs});
+          }).catch(() => this.setAttribute('aria-label', '复制失败，请选择代码手动复制'));
         `
         },
         [

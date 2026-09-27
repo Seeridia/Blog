@@ -1,10 +1,5 @@
 ---
-const {
-  width = 407,
-  height = 164,
-  class: className = '',
-  style
-} = Astro.props
+const { width = 407, height = 164, class: className = '', style } = Astro.props
 ---
 
 <svg
@@ -71,13 +66,6 @@ const {
     --signature-stroke: hsl(var(--foreground));
   }
 
-  @media (prefers-reduced-motion) {
-    path {
-      animation: none !important;
-      stroke-dasharray: unset !important;
-    }
-  }
-
   @keyframes draw {
     0% {
       stroke-dashoffset: var(--dash-array);
@@ -123,5 +111,14 @@ const {
     stroke-dasharray: var(--dash-array);
     transform-origin: center;
     opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    path {
+      animation: none !important;
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
   }
 </style>

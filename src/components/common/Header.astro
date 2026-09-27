@@ -1,0 +1,205 @@
+---
+import { Icon } from 'astro-pure/user'
+import config from '@/site-config'
+---
+
+<site-header>
+  <a class='brand' href='/'>{config.title}</a>
+  <nav id='site-navigation' aria-label='主导航'>
+    {
+      (config.header.menu ?? []).map(({ title, link }) => (
+        <a
+          href={link}
+          aria-current={
+            Astro.url.pathname === link || Astro.url.pathname.startsWith(`${link}/`)
+              ? 'page'
+              : undefined
+          }
+          data-astro-prefetch
+        >
+          {title}
+        </a>
+      ))
+    }
+    <a href='/search' aria-label='搜索'><Icon name='search' class='size-5' /></a>
+  </nav>
+  <div class='header-actions'>
+    <button id='theme-toggle' type='button' aria-label='切换颜色主题'>
+      <span class='theme-system'><Icon name='computer' class='size-5' /></span>
+      <span class='theme-light'><Icon name='sun' class='size-5' /></span>
+      <span class='theme-dark'><Icon name='moon' class='size-5' /></span>
+    </button>
+    <button
+      id='menu-toggle'
+      type='button'
+      aria-controls='site-navigation'
+      aria-expanded='false'
+      aria-label='展开导航'
+    >
+      <Icon name='menu' class='size-5' />
+    </button>
+  </div>
+</site-header>
+<script>
+  import { cycleTheme } from '@/utils/theme'
+
+  class SiteHeader extends HTMLElement {
+    events?: AbortController
+    connectedCallback() {
+      this.events = new AbortController()
+      const { signal } = this.events
+      const toggle = this.querySelector<HTMLButtonElement>('#menu-toggle')!
+      const nav = this.querySelector('nav')!
+      const close = () => {
+        this.removeAttribute('data-open')
+        toggle.setAttribute('aria-expanded', 'false')
+        toggle.setAttribute('aria-label', '展开导航')
+      }
+      toggle.addEventListener(
+        'click',
+        () => {
+          const open = !this.hasAttribute('data-open')
+          this.toggleAttribute('data-open', open)
+          toggle.setAttribute('aria-expanded', String(open))
+          toggle.setAttribute('aria-label', open ? '收起导航' : '展开导航')
+        },
+        { signal }
+      )
+      this.addEventListener(
+        'keydown',
+        (event) => {
+          if (event.key === 'Escape' && this.hasAttribute('data-open')) {
+            close()
+            toggle.focus()
+          }
+        },
+        { signal }
+      )
+      nav.addEventListener(
+        'click',
+        (event) => {
+          if ((event.target as Element).closest('a')) close()
+        },
+        { signal }
+      )
+      document.addEventListener(
+        'click',
+        (event) => {
+          if (!this.contains(event.target as Node)) close()
+        },
+        { signal }
+      )
+      matchMedia('(min-width: 640px)').addEventListener('change', close, { signal })
+      const themeButton = this.querySelector<HTMLButtonElement>('#theme-toggle')!
+      const updateLabel = () => {
+        const names: Record<string, string> = { system: '跟随系统', dark: '深色', light: '浅色' }
+        themeButton.setAttribute(
+          'aria-label',
+          `颜色主题：${names[document.documentElement.dataset.theme ?? 'system']}，点击切换`
+        )
+      }
+      themeButton.addEventListener(
+        'click',
+        () => {
+          cycleTheme()
+          updateLabel()
+        },
+        { signal }
+      )
+      document.addEventListener('theme-change', updateLabel, { signal })
+      updateLabel()
+    }
+    disconnectedCallback() {
+      this.events?.abort()
+    }
+  }
+  if (!customElements.get('site-header')) customElements.define('site-header', SiteHeader)
+</script>
+<style>
+  site-header {
+    position: sticky;
+    top: max(1rem, env(safe-area-inset-top));
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-block: 1rem 2.5rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    background: hsl(var(--background) / 0.96);
+  }
+  .brand {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-inline-end: auto;
+    white-space: nowrap;
+  }
+  nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  nav a {
+    padding-block: 0.5rem;
+  }
+  nav a[aria-current='page'] {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+    text-underline-offset: 0.4em;
+  }
+  .header-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  button {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+  }
+  button:hover {
+    background: hsl(var(--muted));
+  }
+  #menu-toggle,
+  .theme-light,
+  .theme-dark {
+    display: none;
+  }
+  :global(html[data-theme='light']) .theme-system,
+  :global(html[data-theme='dark']) .theme-system {
+    display: none;
+  }
+  :global(html[data-theme='light']) .theme-light,
+  :global(html[data-theme='dark']) .theme-dark {
+    display: block;
+  }
+  @media (max-width: 639px) {
+    site-header {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem;
+    }
+    .brand {
+      font-size: 1.1rem;
+    }
+    nav {
+      order: 3;
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+    nav a {
+      padding: 0.65rem;
+    }
+    :global(.js) site-header:not([data-open]) nav {
+      display: none;
+    }
+    :global(.js) #menu-toggle {
+      display: grid;
+    }
+  }
+</style>

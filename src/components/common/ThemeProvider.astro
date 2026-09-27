@@ -1,0 +1,42 @@
+<script is:inline>
+  ;(() => {
+    let theme = 'system'
+    try {
+      theme = localStorage.getItem('theme') || 'system'
+    } catch {
+      /* Storage may be disabled by the browser. */
+    }
+    if (!['system', 'dark', 'light'].includes(theme)) theme = 'system'
+    const dark =
+      theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+    document.documentElement.classList.add('js')
+    document.documentElement.classList.toggle('dark', dark)
+    document.documentElement.dataset.theme = theme
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', dark ? 'hsl(240 20.54% 5.2%)' : 'hsl(210 33% 99%)')
+  })()
+</script>
+<script>
+  import { applyTheme, preferredTheme } from '@/utils/theme'
+
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (document.documentElement.dataset.theme === 'system') applyTheme('system')
+  })
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'theme' || event.key === null) applyTheme(preferredTheme())
+  })
+  // Preserve the toast event used by reusable theme components, without injecting HTML.
+  document.addEventListener('toast', (event) => {
+    const { message, time = 3000 } = (event as CustomEvent<{ message: string; time?: number }>)
+      .detail
+    const toast = document.createElement('div')
+    toast.className = 'site-toast'
+    toast.setAttribute('role', 'status')
+    document.body.appendChild(toast)
+    requestAnimationFrame(() => {
+      toast.textContent = message
+    })
+    setTimeout(() => toast.remove(), time)
+  })
+</script>

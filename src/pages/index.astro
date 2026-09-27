@@ -23,7 +23,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 <PageLayout meta={{ title: 'Home' }}>
   <main class='flex relative w-full flex-col items-center'>
     <div class='hero-sticky-container'>
-      <Hero class='sticky z-0' />
+      <Hero />
     </div>
     <div
       id='content'
@@ -41,9 +41,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           <Section title='Posts'>
             <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
               {allPostsByDate.map((p) => (
-                <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <PostPreview post={p} />
-                </li>
+                <PostPreview post={p} />
               ))}
             </ul>
             <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />

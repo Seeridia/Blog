@@ -13,146 +13,184 @@ interface Props {
   highlightColor?: string
   back?: string
 }
-
 const { meta, highlightColor, back = '/', ...props } = Astro.props
+const hasSidebar = Astro.slots.has('sidebar')
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
   <Button title='Back' href={back} variant='back' />
-  <main class='mt-6 items-start gap-x-10 md:flex'>
-    {/* Sidebar */}
-    <aside
-      class='animate top-20 min-w-48 basis-60 overflow-y-scroll max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 max-md:border max-md:px-4 max-md:py-3 max-md:bg-muted max-md:rounded-xl'
-      style='height:calc(100vh - 7rem);'
-      id='sidebar'
-    >
-      <slot name='sidebar' />
-    </aside>
-    <div
-      id='sidebar-shade'
-      class='fixed top-0 start-0 w-full h-full'
-      style='display:none;background-color:#00000091;z-index:31'
-    >
-    </div>
-
-    <article class='min-w-0 grow' data-pagefind-body>
-      {/* Content header */}
-      <div id='content-header' class='animate'>
-        <slot name='header' />
-      </div>
-
-      {/* Content */}
-      <div
-        id='content'
-        class={cn(
-          'max-w-none animate mt-8 md:min-w-[45ch] overflow-x-hidden',
-          integ.typography.class
-        )}
-      >
-        <slot />
-      </div>
+  <main class:list={['content-layout', { 'has-sidebar': hasSidebar }]}>
+    {
+      hasSidebar && (
+        <dialog id='sidebar' open aria-label='文章目录' role='complementary'>
+          <button id='sidebar-close' type='button' aria-label='关闭目录'>
+            <span aria-hidden='true'>×</span>
+          </button>
+          <slot name='sidebar' />
+        </dialog>
+      )
+    }
+    <article data-pagefind-body>
+      <div id='content-header' class='animate'><slot name='header' /></div>
+      <div id='content' class={cn('max-w-none animate mt-8', integ.typography.class)}><slot /></div>
     </article>
   </main>
-
-  <div class='bottom mt-6 items-start gap-x-10 md:flex'>
-    {/* Bottom */}
-    <div class='mt-8 flex-1 text-muted-foreground md:min-w-[50ch]'>
-      <slot name='bottom' />
-    </div>
-    <div class='min-w-48 basis-60'>
-      <slot name='bottom-sidebar' />
-    </div>
+  <div class:list={['content-bottom', { 'has-sidebar': hasSidebar }]}>
+    <div class='min-w-0 text-muted-foreground'><slot name='bottom' /></div>
+    <div><slot name='bottom-sidebar' /></div>
   </div>
-
   <BackToTop header='content-header' content='content'>
-    <button
-      slot='other-icons'
-      aria-label='Toggle sidebar'
-      class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
-      id='sidebar-btn'
-    >
-      <Icon name='list' />
-    </button>
+    {
+      hasSidebar && (
+        <button
+          slot='other-icons'
+          type='button'
+          aria-label='展开目录'
+          aria-controls='sidebar'
+          aria-expanded='false'
+          class='size-10 flex items-center justify-center rounded-full border bg-muted text-muted-foreground md:hidden sm:size-12'
+          id='sidebar-btn'
+        >
+          <Icon name='list' />
+        </button>
+      )
+    }
   </BackToTop>
+  <Mermaid />
 </PageLayout>
-
 <script>
-  // Toggle sidebar visibility on button click
-  const sidebarButton = document.getElementById('sidebar-btn')
-  const sidebar = document.getElementById('sidebar')
-  const sidebarShade = document.getElementById('sidebar-shade') as HTMLElement
-
-  if (sidebarShade) {
-    sidebarShade.addEventListener('click', () => {
-      toggleSidebar()
+  const sidebar = document.querySelector<HTMLDialogElement>('#sidebar')
+  const toggle = document.querySelector<HTMLButtonElement>('#sidebar-btn')
+  if (sidebar && toggle) {
+    const desktop = matchMedia('(min-width: 768px)')
+    let previousOverflow = ''
+    const restore = () => {
+      if (sidebar.dataset.modal === 'true') document.body.style.overflow = previousOverflow
+      delete sidebar.dataset.modal
+      toggle.setAttribute('aria-expanded', 'false')
+    }
+    const close = () => {
+      sidebar.close()
+      restore()
+    }
+    const sync = () => {
+      close()
+      sidebar.setAttribute('role', desktop.matches ? 'complementary' : 'dialog')
+      if (desktop.matches) sidebar.open = true
+    }
+    toggle.addEventListener('click', () => {
+      if (desktop.matches) return
+      previousOverflow = document.body.style.overflow
+      sidebar.dataset.modal = 'true'
+      sidebar.showModal()
+      document.body.style.overflow = 'hidden'
+      toggle.setAttribute('aria-expanded', 'true')
     })
+    sidebar.querySelector('#sidebar-close')?.addEventListener('click', close)
+    sidebar.addEventListener('cancel', (event) => {
+      event.preventDefault()
+      close()
+    })
+    sidebar.addEventListener('click', (event) => {
+      if (desktop.matches) return
+      const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]')
+      if (link) {
+        close()
+        const heading = document.getElementById(decodeURIComponent(link.hash.slice(1)))
+        heading?.setAttribute('tabindex', '-1')
+        heading?.focus({ preventScroll: true })
+      } else if (event.target === sidebar) {
+        const rect = sidebar.getBoundingClientRect()
+        if (
+          event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom
+        )
+          close()
+      }
+    })
+    desktop.addEventListener('change', sync)
+    sync()
   }
-
-  function toggleSidebar() {
-    if (sidebar && sidebar.classList.contains('show')) {
-      sidebar.classList.remove('show')
-      sidebarShade.style.display = 'none'
-    } else if (sidebar) {
-      sidebar.classList.add('show')
-      sidebarShade.style.display = 'block'
-    }
-  }
-
-  sidebarButton?.addEventListener('click', () => {
-    toggleSidebar()
-  })
 </script>
-<Mermaid />
 <style>
-  @media (min-width: 769px) {
-    #sidebar-shade {
-      display: none !important;
+  .content-layout,
+  .content-bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--content-gap);
+    margin-top: 2rem;
+  }
+  article {
+    min-width: 0;
+  }
+  #content {
+    overflow-wrap: anywhere;
+  }
+  #sidebar {
+    position: static;
+    width: 100%;
+    margin: 0;
+    padding: 1rem;
+    color: hsl(var(--foreground));
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+  }
+  #sidebar-close {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .has-sidebar {
+      grid-template-columns: minmax(0, var(--content-width)) var(--sidebar-width);
+    }
+    #sidebar {
+      position: sticky;
+      top: 7rem;
+      grid-column: 2;
+      grid-row: 1;
+      max-height: calc(100dvh - 8rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    article {
+      grid-column: 1;
+      grid-row: 1;
     }
   }
-  @media (max-width: 769px) {
-    aside.show {
-      display: block !important;
-      opacity: 1;
+  @media (max-width: 767px) {
+    :global(.js) #sidebar:not([data-modal]) {
+      display: none;
     }
-
-    @keyframes fade-in-side {
-      0% {
-        transform: translateX(50%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    #sidebar[data-modal] {
+      position: fixed;
+      inset: 0 0 0 auto;
+      width: min(85vw, 22rem);
+      max-width: none;
+      height: 100dvh;
+      max-height: none;
+      border-radius: 0;
+      padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
-    @keyframes fade-in {
-      0% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-      }
+    #sidebar::backdrop {
+      background: rgb(0 0 0 / 0.5);
     }
-    aside {
-      animation: 300ms fade-in-side !important;
-      animation-fill-mode: forwards;
-      right: 0;
-      top: 0 !important;
-      height: 100vh !important;
-      min-width: 40vw !important;
-      max-width: 75vw !important;
-      border-top-right-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
-      padding-top: 1.5rem !important;
-      padding-bottom: 1.5rem !important;
-    }
-    #sidebar-shade {
-      animation: 300ms fade-in;
-    }
-  }
-  @media (max-width: 640px) {
-    aside {
-      min-width: 55vw !important;
+    #sidebar[data-modal] #sidebar-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      margin-inline-start: auto;
+      margin-bottom: 0.75rem;
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.5rem;
     }
   }
 </style>

@@ -1,0 +1,106 @@
+---
+import type { MarkdownHeading } from 'astro'
+
+interface Props {
+  headings: MarkdownHeading[]
+  class?: string
+}
+const { headings, class: className } = Astro.props
+const items = headings.filter(({ depth }) => depth >= 2 && depth <= 4)
+---
+
+<article-toc class={className}>
+  <nav aria-label='文章目录'>
+    <h2 class='font-medium'>目录</h2>
+    <ol>
+      {
+        items.map(({ depth, slug, text }) => (
+          <li style={`--toc-indent:${depth - 2}`}>
+            <a href={`#${slug}`}>{text.replace(/#$/, '').trim()}</a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+</article-toc>
+<script>
+  class ArticleTOC extends HTMLElement {
+    observer?: IntersectionObserver
+    events?: AbortController
+    connectedCallback() {
+      const links = [...this.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')]
+      const pairs = links.flatMap((link) => {
+        const heading = document.getElementById(decodeURIComponent(link.hash.slice(1)))
+        return heading ? [{ link, heading }] : []
+      })
+      if (!pairs.length) return
+      const activate = (link: HTMLAnchorElement) => {
+        pairs.forEach((pair) => {
+          if (pair.link === link) pair.link.setAttribute('aria-current', 'location')
+          else pair.link.removeAttribute('aria-current')
+        })
+      }
+      const update = () => {
+        let active = pairs[0]
+        for (const pair of pairs) {
+          if (pair.heading.getBoundingClientRect().top <= 128) active = pair
+        }
+        activate(active.link)
+      }
+      this.observer = new IntersectionObserver(update, {
+        rootMargin: '-96px 0px -60% 0px',
+        threshold: 0
+      })
+      pairs.forEach(({ heading }) => this.observer!.observe(heading))
+      this.events = new AbortController()
+      window.addEventListener('hashchange', update, { signal: this.events.signal })
+      this.addEventListener(
+        'click',
+        (event) => {
+          const link = (event.target as Element).closest<HTMLAnchorElement>('a')
+          if (link) activate(link)
+        },
+        { signal: this.events.signal }
+      )
+      update()
+    }
+    disconnectedCallback() {
+      this.observer?.disconnect()
+      this.events?.abort()
+    }
+  }
+  if (!customElements.get('article-toc')) customElements.define('article-toc', ArticleTOC)
+</script>
+<style>
+  article-toc {
+    display: block;
+  }
+  ol {
+    list-style: none;
+    margin-top: 1rem;
+    padding: 0;
+  }
+  li {
+    padding-inline-start: calc(var(--toc-indent) * 0.75rem);
+  }
+  a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-inline-start: 2px solid transparent;
+    color: hsl(var(--text-secondary));
+    font-size: 0.9rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    border-radius: 0.25rem;
+  }
+  a:hover {
+    color: hsl(var(--foreground));
+    background: hsl(var(--muted));
+  }
+  a[aria-current='location'] {
+    color: hsl(var(--primary));
+    border-color: currentColor;
+    background: hsl(var(--muted));
+    font-weight: 500;
+  }
+</style>

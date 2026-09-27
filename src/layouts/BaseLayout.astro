@@ -1,9 +1,10 @@
 ---
 import type { SiteMeta } from '@/types'
 
-import { Header, ThemeProvider } from 'astro-pure/components/basic'
 import BaseHead from '@/components/BaseHead.astro'
 import Footer from '@/components/common/Footer.astro'
+import Header from '@/components/common/Header.astro'
+import ThemeProvider from '@/components/common/ThemeProvider.astro'
 import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
@@ -43,22 +44,19 @@ const {
         />
       )
     }
+    <a class='skip-link' href='#main-content'>跳转到正文</a>
     <div id='main-container' class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10'>
       <Header />
-      <slot />
+      <div id='main-content' tabindex='-1'><slot /></div>
       <Footer />
     </div>
 
-    {/* Set highlight color */}
-    <style define:vars={{ highlightColor }}>
+    <style>
       :global(.highlight) {
-        color: var(--highlightColor, hsl(var(--primary) / var(--un-text-opacity))) !important;
+        color: hsl(var(--primary) / var(--un-text-opacity, 1)) !important;
       }
       :global(.highlight-bg) {
-        background-color: var(
-          --highlightColor,
-          hsl(var(--primary) / var(--un-text-opacity))
-        ) !important;
+        background-color: hsl(var(--primary) / var(--un-text-opacity, 1)) !important;
       }
       #main-container {
         padding-top: env(safe-area-inset-top);
