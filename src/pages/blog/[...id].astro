@@ -1,8 +1,8 @@
 ---
 import { render, type CollectionEntry } from 'astro:content'
 
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PostLayout from '@/layouts/BlogPost.astro'
+import { getBlogCollection, sortMDByDate } from '@/utils/content'
 
 export const prerender = true
 

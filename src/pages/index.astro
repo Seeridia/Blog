@@ -1,12 +1,12 @@
 ---
+import { PostPreview } from 'astro-pure/components/pages'
+import { Button, Card } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
 import Hero from '@/components/home/Hero.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
-import PageLayout from '@/layouts/BaseLayout.astro'
-import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import { Button, Card } from 'astro-pure/user'
+import { getBlogCollection, sortMDByDate } from '@/utils/content'
 
 const frontendDevelopment = ['Vue.js', 'React.js', 'TypeScript', 'JavaScript', 'CSS', 'HTML']
 const backendDevelopment = ['Node.js']
@@ -22,7 +22,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
 <PageLayout meta={{ title: 'Home' }}>
   <main class='flex relative w-full flex-col items-center'>
-    <div class="hero-sticky-container">
+    <div class='hero-sticky-container'>
       <Hero class='sticky z-0' />
     </div>
     <div
@@ -56,9 +56,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             {
               name: 'Shotmeld',
               description: '高颜值的在线照片存储与管理平台',
-              links: [
-                { type: 'github', href: 'https://github.com/ShotMeld/Shotmeld-web' }
-              ]
+              links: [{ type: 'github', href: 'https://github.com/ShotMeld/Shotmeld-web' }]
             },
             {
               name: 'Alto',

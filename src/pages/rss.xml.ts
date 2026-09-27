@@ -1,83 +1,60 @@
-import type { AstroGlobal, ImageMetadata } from 'astro'
+import { posix } from 'node:path'
+import type { APIContext, ImageMetadata } from 'astro'
 import { getImage } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
 import rss from '@astrojs/rss'
-import type { Root } from 'mdast'
-import rehypeStringify from 'rehype-stringify'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import { unified } from 'unified'
-import { visit } from 'unist-util-visit'
-import config from 'virtual:config'
 
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollection, sortMDByDate } from '@/utils/content'
+import { escapeXml, renderFeedContent } from '@/utils/feed'
+import config from '@/site-config'
 
-// Get dynamic import of images as a map collection
-const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/content/blog/**/*.{jpeg,jpg,png,gif,avif.webp}' // add more image formats if needed
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/content/blog/**/*.{jpeg,jpg,png,gif,avif,webp,svg}'
 )
 
-const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
-  // Replace image links with the correct path
-  function remarkReplaceImageLink() {
-    /**
-     * @param {Root} tree
-     */
-    return async function (tree: Root) {
-      const promises: Promise<void>[] = []
-      visit(tree, 'image', (node) => {
-        if (node.url.startsWith('/images')) {
-          node.url = `${site}${node.url.replace('/', '')}`
-        } else {
-          const imagePathPrefix = `/src/content/blog/${post.id}/${node.url.replace('./', '')}`
-          const promise = imagesGlob[imagePathPrefix]?.().then(async (res) => {
-            const imagePath = res?.default
-            if (imagePath) {
-              node.url = `${site}${(await getImage({ src: imagePath })).src.replace('/', '')}`
-            }
-          })
-          if (promise) promises.push(promise)
-        }
-      })
-      await Promise.all(promises)
-    }
-  }
-
-  const file = await unified()
-    .use(remarkParse)
-    .use(remarkReplaceImageLink)
-    .use(remarkRehype)
-    .use(rehypeStringify)
-    .process(post.body)
-
-  return String(file)
-}
-
-const GET = async (context: AstroGlobal) => {
-  const allPostsByDate = sortMDByDate(await getBlogCollection()) as CollectionEntry<'blog'>[]
-  const siteUrl = context.site ?? new URL(import.meta.env.SITE)
-
+export async function GET(context: APIContext) {
+  const site = context.site ?? new URL(import.meta.env.SITE)
+  const posts = sortMDByDate(await getBlogCollection())
   return rss({
-    // Basic configs
     trailingSlash: false,
     xmlns: { h: 'http://www.w3.org/TR/html4/' },
     stylesheet: '/scripts/pretty-feed-v3.xsl',
-
-    // Contents
     title: config.title,
-    description: config.description,
-    site: import.meta.env.SITE,
+    description: config.description ?? '',
+    site,
     items: await Promise.all(
-      allPostsByDate.map(async (post) => ({
-        pubDate: post.data.publishDate,
-        link: `/blog/${post.id}`,
-        customData: `<h:img src="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />
-          <enclosure url="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />`,
-        content: await renderContent(post, siteUrl),
-        ...post.data
-      }))
+      posts.map(async (post) => {
+        const articleURL = new URL(`/blog/${post.id}`, site).href
+        // filePath preserves filesystem casing (e.g. QQBot), unlike the normalized ID.
+        const source =
+          post.filePath?.replaceAll('\\', '/') ?? `src/content/blog/${post.id}/index.md`
+        const sourceDir = posix.dirname('/' + source.replace(/^.*?src\/content\//, 'src/content/'))
+        const resolveImage = async (url: string) => {
+          if (/^(https?:)?\/\//.test(url) || url.startsWith('/')) return new URL(url, site).href
+          const key = posix.normalize(posix.join(sourceDir, decodeURI(url)))
+          const loader = images[key]
+          if (!loader) throw new Error(`RSS image not found: ${key} (${post.id})`)
+          const { default: src } = await loader()
+          return new URL((await getImage({ src })).src, site).href
+        }
+        const cover = post.data.heroImage?.src
+        const coverURL = cover
+          ? new URL(typeof cover === 'string' ? cover : cover.src, site).href
+          : undefined
+        return {
+          title: post.data.title,
+          description: post.data.description,
+          pubDate: post.data.publishDate,
+          categories: post.data.tags,
+          link: articleURL,
+          customData: coverURL ? `<h:img src="${escapeXml(coverURL)}" />` : undefined,
+          content: await renderFeedContent({
+            body: post.body ?? '',
+            mdx: source.endsWith('.mdx'),
+            articleURL,
+            resolveImage
+          })
+        }
+      })
     )
   })
 }
-
-export { GET }

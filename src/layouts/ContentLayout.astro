@@ -1,6 +1,7 @@
 ---
+import type { SiteMeta } from '@/types'
+
 import { BackToTop } from 'astro-pure/components/pages'
-import type { SiteMeta } from 'astro-pure/types'
 import { Button, Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
@@ -33,7 +34,7 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
     >
     </div>
 
-    <article class='min-w-0 grow'>
+    <article class='min-w-0 grow' data-pagefind-body>
       {/* Content header */}
       <div id='content-header' class='animate'>
         <slot name='header' />
@@ -101,7 +102,7 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
   })
 </script>
 <!-- Client-side mermaid loader (CDN) -->
-<script is:inline type="module">
+<script is:inline type='module'>
   const MERMAID_CDN = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'
 
   try {

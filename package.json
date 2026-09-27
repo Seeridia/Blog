@@ -27,12 +27,21 @@
     "astro-pure": "1.4.7",
     "colorthief": "^3.5.0",
     "katex": "^0.18.4",
+    "mermaid": "11",
     "rehype": "13.0.2",
     "rehype-katex": "^7.0.1",
+    "rehype-sanitize": "6",
+    "rehype-stringify": "10",
+    "remark-gfm": "4",
     "remark-math": "^6.0.0",
+    "remark-mdx": "3",
+    "remark-parse": "11",
+    "remark-rehype": "11",
     "sharp": "^0.35.4",
     "splitting": "^1.1.0",
-    "typescript": "npm:@typescript/typescript6@^6.0.2"
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "unified": "11",
+    "unist-util-visit": "5"
   },
   "devDependencies": {
     "@elog/cli": "0.14.7",

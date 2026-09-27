@@ -1,12 +1,13 @@
 ---
 // import { ClientRouter } from 'astro:transitions'
 
-import type { SiteMeta } from 'astro-pure/types'
+import type { SiteMeta } from '@/types'
+
 import config from '@/site-config'
 
 type Props = SiteMeta
 
-const { articleDate, description, ogImage, title } = Astro.props
+const { articleDate, modifiedDate, description, ogImage, title } = Astro.props
 
 const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
@@ -68,6 +69,8 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
     </>
   )
 }
+
+{modifiedDate && <meta content={modifiedDate} property='article:modified_time' />}
 
 {/* Twitter */}
 <meta content='summary_large_image' property='twitter:card' />
