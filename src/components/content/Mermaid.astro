@@ -14,7 +14,6 @@
           mermaid.initialize({
             startOnLoad: false,
             securityLevel: 'strict',
-            flowchart: { useMaxWidth: false },
             theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default'
           })
           const { svg, bindFunctions } = await mermaid.render(`diagram-${id}`, source)
@@ -71,7 +70,6 @@
     padding: 1rem;
   }
   .rendered-diagram svg {
-    max-width: none;
     display: block;
     margin-inline: auto;
     height: auto;

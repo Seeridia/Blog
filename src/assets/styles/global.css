@@ -16,9 +16,9 @@
 }
 @media (prefers-reduced-motion) {
   .animate {
-    opacity: 1;
-    animation: none;
-    transform: none;
+    opacity: 0;
+    animation: 100ms fade-in-up;
+    animation-fill-mode: forwards;
   }
 }
 #content-header {
@@ -163,8 +163,7 @@ span.katex-display {
       }
     }
   }
-  &:hover,
-  &:focus-within {
+  &:hover {
     button.copy {
       opacity: 1;
     }
@@ -241,13 +240,4 @@ body::-webkit-scrollbar {
 }
 ::-webkit-scrollbar-track {
   background: transparent;
-}
-
-@media (hover: none) {
-  .astro-code button.copy {
-    opacity: 1;
-  }
-  .astro-code .language {
-    display: none;
-  }
 }

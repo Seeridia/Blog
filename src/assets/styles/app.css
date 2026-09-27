@@ -24,11 +24,9 @@ html {
 :root {
   --background: 210 33% 99%;
   --foreground: 240 10% 3.9%;
-  --primary: 200 29% 37%;
+  --primary: 200 29% 45%;
   --muted: 240 4.8% 95%;
-  --text-body: 240 5% 18%;
-  --text-secondary: 240 3.8% 38%;
-  --muted-foreground: var(--text-secondary);
+  --muted-foreground: 240 3.8% 28.1%;
   --card: 0 0% 100%;
   --border: 240 5.9% 88%;
   --input: 240 5.9% 90%;
@@ -40,9 +38,7 @@ html {
   --foreground: 0 0% 98%;
   --primary: 195 95% 85%;
   --muted: 240 5.9% 12%;
-  --text-body: 240 5% 88%;
-  --text-secondary: 240 5% 70%;
-  --muted-foreground: var(--text-secondary);
+  --muted-foreground: 240 5% 74.9%;
   --card: 240 10% 3.9%;
   --border: 240 3.7% 19.9%;
   --input: 240 3.7% 15.9%;
@@ -60,55 +56,5 @@ a {
   transition: color 0.2s ease;
   &:hover {
     color: hsl(var(--primary) / var(--un-text-opacity, 1));
-  }
-}
-
-:root {
-  --content-width: 48rem;
-  --sidebar-width: 13rem;
-  --content-gap: clamp(1.5rem, 3vw, 2.5rem);
-}
-#waline {
-  scroll-margin-top: 7rem;
-}
-.prose {
-  color: hsl(var(--text-body));
-}
-:where(a, button, input, textarea, select, summary):focus-visible {
-  outline: 2px solid hsl(var(--ring));
-  outline-offset: 4px;
-}
-:where(button, a) {
-  touch-action: manipulation;
-}
-.skip-link {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 100;
-  padding: 0.75rem 1rem;
-  background: hsl(var(--background));
-  border: 2px solid hsl(var(--ring));
-  border-radius: var(--radius);
-  transform: translateY(-200%);
-}
-.skip-link:focus {
-  transform: none;
-}
-.site-toast {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  padding: 0.75rem 1rem;
-  background: hsl(var(--muted));
-  color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-}
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
   }
 }
