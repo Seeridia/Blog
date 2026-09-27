@@ -1,9 +1,10 @@
 ---
-import links from '../../../public/links.json'
 import config from 'virtual:config'
 
 import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
+
+import links from '../../../public/links.json'
 
 const { friends } = links
 // Provide safe defaults in case `links` or `config.integ.links` are missing

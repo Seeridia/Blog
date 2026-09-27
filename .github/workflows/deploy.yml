@@ -1,46 +1,69 @@
-# .github/workflows/deploy.yml
+name: Check and Deploy
 
-# 工作流名称
-name: Deploy to Production Server
-
-# 触发条件：当有代码推送到 main 分支时
 on:
+  pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
 
-# 工作任务
+permissions:
+  contents: read
+
 jobs:
-  build-and-deploy:
-    # 运行环境：使用最新的 Ubuntu
+  check:
     runs-on: ubuntu-latest
-
     steps:
-      # 第一步：迁出代码
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      # 第二步：设置 Bun 环境
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          bun-version: 'latest'
+          node-version-file: .node-version
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - uses: actions/cache@v4
+        with:
+          path: .cache/remote
+          key: remote-metadata-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: remote-metadata-v1-
+      - run: bun install --frozen-lockfile
+      - run: bun run verify
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push'
+        with:
+          name: site-release
+          retention-days: 5
+          path: |
+            dist/
+            scripts/activate-release.py
 
-      # 第三步：安装依赖
-      - name: Install Dependencies
-        run: bun install --frozen-lockfile
-
-      # 第四步：打包项目
-      - name: Build Project
-        run: bun run build
-
-      # 第五步：部署到服务器
-      - name: Deploy to Server
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: check
+    runs-on: ubuntu-latest
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+    env:
+      DEPLOY_TARGET: ${{ secrets.TARGET_DIR }}
+      RELEASE_ID: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-release
+      - name: Upload staged release
         uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/*"
-          target: ${{ secrets.TARGET_DIR }}
-          strip_components: 1
+          source: 'dist/*,scripts/activate-release.py'
+          target: ${{ env.DEPLOY_TARGET }}.deploy/${{ env.RELEASE_ID }}
+      - name: Verify and activate release
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: DEPLOY_TARGET,RELEASE_ID
+          script: |
+            set -eu
+            python3 "${DEPLOY_TARGET}.deploy/${RELEASE_ID}/scripts/activate-release.py" "$DEPLOY_TARGET" "$RELEASE_ID"

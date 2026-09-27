@@ -16,7 +16,14 @@
     "lint": "eslint --fix 'src/**/*.{js,ts,jsx,tsx,astro}'",
     "yijiansilian": "bun lint && bun sync && bun check && bun format",
     "clean": "rm -rf .astro .vercel dist",
-    "elog:sync": "elog sync -c .elog/elog.config.js -e .elog.env && node scripts/elog-postprocess.cjs"
+    "elog:sync": "elog sync -c .elog/elog.config.js -e .elog.env && node scripts/elog-postprocess.cjs",
+    "lint:check": "eslint 'src/**/*.{js,ts,jsx,tsx,astro}'",
+    "format:check": "node scripts/check-format.mjs",
+    "format:code": "node scripts/check-format.mjs --write",
+    "test": "bun test tests",
+    "test:deploy": "python3 -m unittest discover -s tests -p \"*_test.py\"",
+    "verify:build": "node scripts/verify-build.mjs",
+    "verify": "bun run lint:check && bun run format:check && bun run test && bun run test:deploy && bun run build && bun run verify:build"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
@@ -65,5 +72,10 @@
   },
   "patchedDependencies": {
     "astro-pure@1.4.7": "patches/astro-pure@1.4.7.patch"
+  },
+  "packageManager": "bun@1.4.2",
+  "engines": {
+    "node": ">=22.12.0",
+    "bun": "1.4.2"
   }
 }
