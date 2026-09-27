@@ -80,3 +80,6 @@ ignore.*
 bunfig.toml
 /src/content/blog/test.*
 /test/
+
+# Cached external metadata (reused in CI)
+.cache/

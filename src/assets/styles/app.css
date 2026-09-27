@@ -1,15 +1,17 @@
 /* Font */
 @font-face {
   font-family: 'Satoshi';
-  src: url('/fonts/Satoshi-Variable.ttf');
+  src: url('/fonts/Satoshi-Variable.woff2') format('woff2');
   font-style: normal;
   font-display: swap;
+  font-weight: 300 900;
 }
 @font-face {
   font-family: 'Satoshi';
-  src: url('/fonts/Satoshi-VariableItalic.ttf');
+  src: url('/fonts/Satoshi-VariableItalic.woff2') format('woff2');
   font-style: italic;
   font-display: swap;
+  font-weight: 300 900;
 }
 :root {
   --font-satoshi: 'Satoshi';

@@ -1,32 +1,28 @@
 ---
-// https://waline.js.org/en/guide/features/pageview.html#use-alone
 import config from '@/site-config'
 ---
 
-<script
-  is:inline
-  type='module'
-  data-astro-rerun
-  define:vars={{ npmCDN: config.npmCDN, walineServer: config.integ.waline.server }}
->
-  async function loadPageview() {
-    try {
-      const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
-      const el = document.querySelector('.waline-pageview-count')
-      if (el) {
-        return pageview.pageviewCount({
-          serverURL: walineServer,
-          path: window.location.pathname
-        })
+{config.integ.waline.enable && <waline-counts data-server={config.integ.waline.server} />}
+<script>
+  import { commentCount } from '@waline/client/comment'
+  import { pageviewCount } from '@waline/client/pageview'
+
+  class WalineCounts extends HTMLElement {
+    aborts: (() => void)[] = []
+    connectedCallback() {
+      const serverURL = this.dataset.server ?? ''
+      const path = window.location.pathname
+      if (document.querySelector('.waline-pageview-count')) {
+        this.aborts.push(pageviewCount({ serverURL, path }))
       }
-    } catch (e) {
-      console.error('Failed to load Waline pageview:', e)
+      if (document.querySelector('.waline-comment-count')) {
+        this.aborts.push(commentCount({ serverURL, path }))
+      }
+    }
+    disconnectedCallback() {
+      this.aborts.forEach((abort) => abort())
+      this.aborts = []
     }
   }
-
-  const abort = await loadPageview()
-  // After 500ms, if the network request has not been completed, cancel this operation
-  if (typeof abort === 'function') {
-    setTimeout(() => abort(), 500)
-  }
+  if (!customElements.get('waline-counts')) customElements.define('waline-counts', WalineCounts)
 </script>

@@ -1,59 +1,88 @@
 ---
-import config from '@/site-config'
-
-import '@waline/client/waline.css'
-
 import { cn } from 'astro-pure/utils'
+import config from '@/site-config'
 
 const { class: className } = Astro.props
 ---
 
 {
   config.integ.waline.enable && (
-    <comment-component>
+    <comment-component
+      data-server={config.integ.waline.server}
+      data-emoji={JSON.stringify(
+        config.integ.waline.emoji?.map(
+          (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}`
+        )
+      )}
+      data-options={JSON.stringify(config.integ.waline.additionalConfigs)}
+    >
       <div id='waline' class={cn('not-prose', className)}>
-        Comment seems to stuck. Try to refresh?✨
+        <p role='status'>评论将在接近此处时加载。</p>
+        <button type='button' class='rounded border px-3 py-2'>
+          加载评论
+        </button>
       </div>
     </comment-component>
   )
 }
 
 <script>
-  import { init as walineInit } from '@waline/client'
-  import type { WalineEmojiPresets } from '@waline/client'
-  import config from 'virtual:config'
-
-  const walineConfig = config.integ.waline
+  import type { WalineInstance } from '@waline/client'
 
   class Comment extends HTMLElement {
-    constructor() {
-      super()
-    }
-
+    observer?: IntersectionObserver
+    instance?: WalineInstance | null
+    loading = false
     connectedCallback() {
-      // Prevent Vue log errors
-      ;(globalThis as unknown as { __VUE_OPTIONS_API__: boolean }).__VUE_OPTIONS_API__ = true
-      ;(globalThis as unknown as { __VUE_PROD_DEVTOOLS__: boolean }).__VUE_PROD_DEVTOOLS__ = false
-      ;(
-        globalThis as unknown as { __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: boolean }
-      ).__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false
-
-      const emoji = walineConfig.emoji?.map(
-        (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
+      this.querySelector('button')?.addEventListener('click', this.load)
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) void this.load()
+        },
+        { rootMargin: '300px' }
       )
-
-      walineInit({
-        el: '#waline',
-        serverURL: walineConfig.server || '',
-        emoji,
-        reaction: ['/icons/heart-item.svg'],
-        ...walineConfig.additionalConfigs,
-        noRss: true,
-      })
+      this.observer.observe(this)
+    }
+    load = async () => {
+      if (this.loading || this.instance) return
+      this.loading = true
+      this.observer?.disconnect()
+      const status = this.querySelector('[role="status"]')
+      const button = this.querySelector('button')
+      if (status) status.textContent = '正在加载评论…'
+      if (button) button.disabled = true
+      try {
+        const { init } = await import('../../scripts/comments')
+        if (!this.isConnected) return
+        this.instance = init({
+          ...JSON.parse(this.dataset.options ?? '{}'),
+          el: this.querySelector('#waline') as HTMLElement,
+          serverURL: this.dataset.server ?? '',
+          emoji: JSON.parse(this.dataset.emoji ?? '[]'),
+          reaction: ['/icons/heart-item.svg'],
+          pageview: false,
+          comment: false,
+          noRss: true
+        })
+      } catch (error) {
+        console.warn('Comment loading failed', error)
+        if (status) status.textContent = '评论暂时无法加载，请稍后重试。'
+        if (button) {
+          button.disabled = false
+          button.textContent = '重新加载'
+        }
+      } finally {
+        this.loading = false
+      }
+    }
+    disconnectedCallback() {
+      this.observer?.disconnect()
+      this.instance?.destroy()
+      this.instance = undefined
+      this.querySelector('button')?.removeEventListener('click', this.load)
     }
   }
-
-  if (walineConfig.enable) customElements.define('comment-component', Comment)
+  if (!customElements.get('comment-component')) customElements.define('comment-component', Comment)
 </script>
 
 <style>

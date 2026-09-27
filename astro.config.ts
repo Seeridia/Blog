@@ -1,6 +1,6 @@
 import { rehypeHeadingIds, unified } from '@astrojs/markdown-remark'
 import AstroPureIntegration from 'astro-pure'
-import { defineConfig, fontProviders } from 'astro/config'
+import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
@@ -36,6 +36,14 @@ export default defineConfig({
     responsiveStyles: true,
     service: {
       entrypoint: 'astro/assets/services/sharp'
+    }
+  },
+
+  vite: {
+    define: {
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false
     }
   },
 
@@ -80,15 +88,6 @@ export default defineConfig({
     }
   },
   // [Experimental]
-  fonts: [
-    {
-      provider: fontProviders.fontshare(),
-      name: 'Satoshi',
-      cssVariable: '--font-satoshi',
-      weights: [400, 500],
-      subsets: ['latin']
-    }
-  ],
   experimental: {
     contentIntellisense: true
   }

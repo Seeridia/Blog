@@ -28,6 +28,7 @@
     "colorthief": "^3.5.0",
     "katex": "^0.18.4",
     "mermaid": "11",
+    "node-html-parser": "7",
     "rehype": "13.0.2",
     "rehype-katex": "^7.0.1",
     "rehype-sanitize": "6",

@@ -1,0 +1,73 @@
+---
+import { getLinkPreview } from '@/utils/link-preview'
+
+interface Props {
+  href: string
+  title?: string
+  description?: string
+  image?: string
+  hideMedia?: boolean
+  zoomable?: boolean
+}
+const { href, title, description, image, hideMedia = false } = Astro.props
+// Explicit metadata makes important cards reproducible even on a clean, offline build.
+const remote = title ? undefined : await getLinkPreview(href)
+const cardTitle = title ?? remote?.title ?? new URL(href).hostname
+const cardDescription = description ?? remote?.description
+const cardImage = image ?? remote?.image
+---
+
+<a class='link-preview not-prose' {href} target='_blank' rel='noopener noreferrer'>
+  {
+    cardImage && !hideMedia && (
+      <img src={cardImage} alt='' width='480' height='252' loading='lazy' decoding='async' />
+    )
+  }
+  <span class='link-preview__text'>
+    <strong>{cardTitle}</strong>
+    {cardDescription && <span class='line-clamp-2'>{cardDescription}</span>}
+    <small>{new URL(href).hostname}</small>
+  </span>
+</a>
+<style>
+  .link-preview {
+    display: flex;
+    overflow: hidden;
+    margin-block: 1rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    color: hsl(var(--text-secondary, var(--muted-foreground)));
+    text-decoration: none;
+    transition: background-color 160ms;
+  }
+  .link-preview:hover {
+    background: hsl(var(--muted));
+  }
+  .link-preview img {
+    width: 35%;
+    height: auto;
+    object-fit: cover;
+    align-self: stretch;
+    margin: 0;
+  }
+  .link-preview__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  strong {
+    color: hsl(var(--foreground));
+  }
+  @media (max-width: 639px) {
+    .link-preview {
+      flex-direction: column;
+    }
+    .link-preview img {
+      width: 100%;
+      aspect-ratio: 480 / 252;
+    }
+  }
+</style>

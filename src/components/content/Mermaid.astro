@@ -1,0 +1,77 @@
+<script>
+  const blocks = [...document.querySelectorAll<HTMLElement>('div[data-language="mermaid"]')]
+  if (blocks.length) {
+    let library: Promise<typeof import('mermaid')> | undefined
+    let queue = Promise.resolve()
+    const rendered = new Map<HTMLElement, { source: string; id: number }>()
+    const render = (block: HTMLElement, source: string, id: number) => {
+      queue = queue
+        .then(async () => {
+          if (!block.isConnected) return
+          library ??= import('mermaid')
+          const { default: mermaid } = await library
+          await document.fonts.ready
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'strict',
+            theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default'
+          })
+          const { svg, bindFunctions } = await mermaid.render(`diagram-${id}`, source)
+          // Keep the original code available until rendering succeeds.
+          block.innerHTML = svg
+          block.classList.add('rendered-diagram')
+          bindFunctions?.(block)
+          rendered.set(block, { source, id })
+        })
+        .catch((error) => {
+          console.warn('Diagram could not be rendered; source remains available.', error)
+        })
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          const block = entry.target as HTMLElement
+          observer.unobserve(block)
+          const source = block.querySelector('pre code')?.textContent
+          if (source) render(block, source, blocks.indexOf(block))
+        }
+      },
+      { rootMargin: '300px' }
+    )
+    blocks.forEach((block) => observer.observe(block))
+
+    // Only observe the theme attribute, not mutations throughout the document.
+    let dark = document.documentElement.classList.contains('dark')
+    const themeObserver = new MutationObserver(() => {
+      const next = document.documentElement.classList.contains('dark')
+      if (next === dark) return
+      dark = next
+      rendered.forEach(({ source, id }, block) => render(block, source, id))
+    })
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+    window.addEventListener(
+      'pagehide',
+      () => {
+        observer.disconnect()
+        themeObserver.disconnect()
+      },
+      { once: true }
+    )
+  }
+</script>
+
+<style is:global>
+  .rendered-diagram {
+    overflow-x: auto;
+    padding: 1rem;
+  }
+  .rendered-diagram svg {
+    display: block;
+    margin-inline: auto;
+    height: auto;
+  }
+</style>
