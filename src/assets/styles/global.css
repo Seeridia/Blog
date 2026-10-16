@@ -31,6 +31,10 @@
   animation-delay: 150ms;
 }
 
+#content blockquote {
+  color: unset;
+}
+
 /* Katex */
 span.katex-display {
   overflow-y: scroll;
