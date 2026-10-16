@@ -45,7 +45,7 @@ jobs:
     concurrency:
       group: production-deploy
       cancel-in-progress: false
-    if: github.event_name == 'workflow_dispatch' && vars.MIGRATION_FREEZE != 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.MIGRATION_FREEZE != 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
