@@ -1,12 +1,19 @@
-name: Check and Deploy
+name: Check and Publish Blog
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches: [main]
 
 permissions:
   contents: read
+
+env:
+  REGISTRY: ${{ vars.TCR_REGISTRY || 'ccr.ccs.tencentyun.com' }}
+  TCR_NAMESPACE: ${{ vars.TCR_NAMESPACE }}
+  TCR_REPOSITORY: ${{ vars.TCR_REPOSITORY }}
+  IMAGE: ${{ vars.TCR_REGISTRY || 'ccr.ccs.tencentyun.com' }}/${{ vars.TCR_NAMESPACE }}/${{ vars.TCR_REPOSITORY }}
 
 jobs:
   check:
@@ -27,30 +34,124 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run verify
       - uses: actions/upload-artifact@v4
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         with:
           name: site-build
           retention-days: 5
           path: dist/
 
-  deploy:
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') && vars.MIGRATION_FREEZE != 'true'
+  publish:
     needs: check
-    runs-on: ubuntu-latest
     concurrency:
       group: production-deploy
       cancel-in-progress: false
+    if: github.event_name == 'workflow_dispatch' && vars.MIGRATION_FREEZE != 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Validate repository variables
+        shell: bash
+        env:
+          DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
+        run: |
+          for variable in TCR_NAMESPACE TCR_REPOSITORY DOKPLOY_WEBHOOK_URL; do
+            if [[ -z "${!variable}" ]]; then
+              echo "::error::Missing Actions variable or secret: $variable"
+              exit 1
+            fi
+          done
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Download built site
+        uses: actions/download-artifact@v8
         with:
           name: site-build
-          path: dist
-      - name: Upload site
-        uses: appleboy/scp-action@v1.0.0
+          path: dist/
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to Tencent TCR
+        uses: docker/login-action@v4
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: 'dist/*'
-          target: ${{ secrets.TARGET_DIR }}
-          strip_components: 1
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.TCR_USERNAME }}
+          password: ${{ secrets.TCR_PASSWORD }}
+
+      - name: Build and load image
+        id: build
+        timeout-minutes: 15
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: |
+            ${{ env.IMAGE }}:sha-${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+          provenance: false
+          sbom: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Push image to Tencent TCR
+        id: push
+        timeout-minutes: 10
+        shell: bash
+        run: |
+          set -o pipefail
+          docker push "${IMAGE}:sha-${GITHUB_SHA}" | tee "$RUNNER_TEMP/tcr-push.log"
+          digest=$(sed -n 's/.*digest: \(sha256:[a-f0-9]\{64\}\).*/\1/p' "$RUNNER_TEMP/tcr-push.log" | tail -n 1)
+          if [[ -z "$digest" ]]; then
+            echo "::error::Push completed without a registry digest in the output"
+            exit 1
+          fi
+          docker push "${IMAGE}:latest" | tee "$RUNNER_TEMP/tcr-latest-push.log"
+          latest_digest=$(sed -n 's/.*digest: \(sha256:[a-f0-9]\{64\}\).*/\1/p' "$RUNNER_TEMP/tcr-latest-push.log" | tail -n 1)
+          if [[ "$latest_digest" != "$digest" ]]; then
+            echo "::error::latest and SHA tags must resolve to the same image digest"
+            exit 1
+          fi
+          printf 'digest=%s\n' "$digest" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger Dokploy deployment
+        timeout-minutes: 2
+        env:
+          DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
+        run: |
+          umask 077
+          jq -n \
+            --arg image "${IMAGE}:latest" \
+            --arg sha "$GITHUB_SHA" \
+            '{registry_package: {package_version: {package_url: $image, container_metadata: {tag: {name: "latest"}}}}, head_commit: {id: $sha}}' \
+            > "$RUNNER_TEMP/dokploy-deploy-request.json"
+          # The supported registry_package payload lets Dokploy check the image and tag.
+          http_code=$(curl --fail --silent --show-error --connect-timeout 10 --max-time 60 \
+            -X POST "$DOKPLOY_WEBHOOK_URL" \
+            -H "accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "x-github-event: registry_package" \
+            --data-binary "@$RUNNER_TEMP/dokploy-deploy-request.json" \
+            --output "$RUNNER_TEMP/dokploy-deploy-response.json" \
+            --write-out '%{http_code}')
+          if [[ "$http_code" != "200" ]]; then
+            echo "::error::Dokploy webhook rejected the request (HTTP $http_code). Check Auto Deploy and the configured image/tag."
+            exit 1
+          fi
+          jq -e '.message == "Application deployed successfully"' "$RUNNER_TEMP/dokploy-deploy-response.json" > /dev/null
+          echo "Dokploy webhook deployment request accepted. Check Deployments for the final result."
+
+      - name: Show deployment image
+        env:
+          IMAGE_DIGEST: ${{ steps.push.outputs.digest }}
+        run: |
+          echo "### Dokploy 部署镜像" >> "$GITHUB_STEP_SUMMARY"
+          echo "Deploy target: ${IMAGE}:latest" >> "$GITHUB_STEP_SUMMARY"
+          echo "${IMAGE}:sha-${GITHUB_SHA}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Digest: ${IMAGE_DIGEST}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Dokploy deployment requested; this confirms submission, not deployment completion." >> "$GITHUB_STEP_SUMMARY"
