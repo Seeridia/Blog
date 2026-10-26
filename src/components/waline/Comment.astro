@@ -29,6 +29,8 @@ const { class: className } = Astro.props
 <script>
   import type { WalineInstance } from '@waline/client'
 
+  import { normalizeWalinePath } from './path'
+
   class Comment extends HTMLElement {
     observer?: IntersectionObserver
     instance?: WalineInstance | null
@@ -58,6 +60,7 @@ const { class: className } = Astro.props
           ...JSON.parse(this.dataset.options ?? '{}'),
           el: this.querySelector('#waline') as HTMLElement,
           serverURL: this.dataset.server ?? '',
+          path: normalizeWalinePath(window.location.pathname),
           emoji: JSON.parse(this.dataset.emoji ?? '[]'),
           reaction: ['/icons/heart-item.svg'],
           pageview: false,

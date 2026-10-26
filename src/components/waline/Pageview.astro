@@ -7,11 +7,13 @@ import config from '@/site-config'
   import { commentCount } from '@waline/client/comment'
   import { pageviewCount } from '@waline/client/pageview'
 
+  import { normalizeWalinePath } from './path'
+
   class WalineCounts extends HTMLElement {
     aborts: (() => void)[] = []
     connectedCallback() {
       const serverURL = this.dataset.server ?? ''
-      const path = window.location.pathname
+      const path = normalizeWalinePath(window.location.pathname)
       if (document.querySelector('.waline-pageview-count')) {
         this.aborts.push(pageviewCount({ serverURL, path }))
       }
